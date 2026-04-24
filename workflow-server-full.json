@@ -1,0 +1,1613 @@
+{
+  "id": "weFLf4PncCNyL0xA",
+  "name": "Máquina de Prospección",
+  "active": false,
+  "isArchived": false,
+  "versionId": "d1657038-c985-43fa-98c6-34c507252c2c",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "createdAt": "2026-03-19T12:50:05.783Z",
+  "updatedAt": "2026-04-20T00:45:41.149Z",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "connections": {
+    "Bridge Agent 1": {
+      "main": [
+        [
+          {
+            "node": "AGENTE 1a - Context Synthesis",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AGENTE 1b - Context Synthesis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 1a - Context Synthesis": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 1a": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 1a - Context Synthesis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 1b - Context Synthesis": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 1b": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 1b - Context Synthesis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Agent 1": {
+      "main": [
+        [
+          {
+            "node": "Selector Agent 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Selector Agent 1": {
+      "main": [
+        [
+          {
+            "node": "Bridge Agent 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bridge Agent 2": {
+      "main": [
+        [
+          {
+            "node": "AGENTE 2a - Proof Selector",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AGENTE 2b - Proof Selector",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 2a - Proof Selector": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 2a": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 2a - Proof Selector",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 2b - Proof Selector": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 2b": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 2b - Proof Selector",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Agent 2": {
+      "main": [
+        [
+          {
+            "node": "Selector Agent 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Selector Agent 2": {
+      "main": [
+        [
+          {
+            "node": "Bridge Agent 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bridge Agent 3": {
+      "main": [
+        [
+          {
+            "node": "AGENTE 3a - Hypothesis Engine",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AGENTE 3b - Hypothesis Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 3a - Hypothesis Engine": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 3a": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 3a - Hypothesis Engine",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 3b - Hypothesis Engine": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 3b": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 3b - Hypothesis Engine",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Agent 3": {
+      "main": [
+        [
+          {
+            "node": "Selector Agent 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Selector Agent 3": {
+      "main": [
+        [
+          {
+            "node": "Bridge Agent 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bridge Agent 4": {
+      "main": [
+        [
+          {
+            "node": "AGENTE 4a - Strategy + CTA",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AGENTE 4b - Strategy + CTA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 4a - Strategy + CTA": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 4a": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 4a - Strategy + CTA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 4b - Strategy + CTA": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 4b": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 4b - Strategy + CTA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Agent 4": {
+      "main": [
+        [
+          {
+            "node": "Selector Agent 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Selector Agent 4": {
+      "main": [
+        [
+          {
+            "node": "Bridge Agent 5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bridge Agent 5": {
+      "main": [
+        [
+          {
+            "node": "AGENTE 5a - Copy Generator",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AGENTE 5b - Copy Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 5a - Copy Generator": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 5a": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 5a - Copy Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 5b - Copy Generator": {
+      "main": [
+        [
+          {
+            "node": "Merge Agent 5",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 5b": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 5b - Copy Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Agent 5": {
+      "main": [
+        [
+          {
+            "node": "Selector Agent 5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Selector Agent 5": {
+      "main": [
+        [
+          {
+            "node": "AGENTE 6 - QA Auditor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Agente 6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE 6 - QA Auditor1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Campos1": {
+      "main": [
+        [
+          {
+            "node": "Bridge Agent 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE 6 - QA Auditor1": {
+      "main": [
+        [
+          {
+            "node": "Parse Agente 6 + Build PATCH1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Agente 6 + Build PATCH1": {
+      "main": [
+        [
+          {
+            "node": "UPDATE leads_agentes1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE leads_agentes1": {
+      "main": [
+        [
+          {
+            "node": "Loop Agentes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formulario GHL1": {
+      "main": [
+        [
+          {
+            "node": "Preparar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Apollo Match1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apollo Match1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Procesar Datos Apollo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procesar Datos Apollo": {
+      "main": [
+        [
+          {
+            "node": "Loop por Lead1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combinar Apollo + LinkedIn1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop por Lead1": {
+      "main": [
+        [
+          {
+            "node": "Combinar Apollo + LinkedIn1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LinkedIn URLs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run HarvestAPI1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop por Lead1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combinar Apollo + LinkedIn1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combinar Apollo + LinkedIn1": {
+      "main": [
+        [
+          {
+            "node": "Preparar Data para Agentes1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Data para Agentes1": {
+      "main": [
+        [
+          {
+            "node": "Loop Agentes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn URLs1": {
+      "main": [
+        [
+          {
+            "node": "Run HarvestAPI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Agentes": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Extraer Campos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const ctx = $input.first().json;\nconst perfil = ctx.perfilParaAgente || '';\n\nconst prompt = `Eres un investigador B2B de élite con expertise en psicología del comportamiento, análisis de perfiles profesionales y ventas consultivas. Tu misión es construir una imagen mental completa de este prospecto para que un vendedor pueda conectar genuinamente.\n\nPERFIL COMPLETO DEL PROSPECTO:\n${perfil}\n\nINSTRUCCIONES DE ANÁLISIS:\n\n1. PERSONALIDAD Y COMPORTAMIENTO\nAnaliza su trayectoria laboral completa: ¿sube rápido? ¿cambia de empresa frecuentemente? ¿permanece en roles técnicos o asciende a gestión? ¿cuánto tiempo lleva en su cargo actual? Su headline y summary de LinkedIn revelan cómo se percibe a sí mismo/a. Sus skills muestran en qué es reconocido/a. Identifica 3-5 rasgos de personalidad con evidencia concreta del perfil, no con suposiciones genéricas de industria.\n\n2. TIPO DISC\nD=Dominante (resultados, velocidad, control, toma decisiones rápido), I=Influyente (personas, reconocimiento, entusiasmo, relaciones), S=Estable (equipo, proceso, armonía, seguridad), C=Concienzudo (calidad, datos, precisión, análisis profundo). Clasifica con EVIDENCIA del perfil, no con estereotipos. Incluye tipo secundario si aplica y justifica con ejemplos específicos.\n\n3. GUÍA DE COMUNICACIÓN\nDefine específicamente: tono ideal para primer contacto (formal vs informal, directo vs consultivo), qué enfatizar según DISC (resultados/relaciones/procesos/datos), qué NUNCA hacer en primer contacto, nivel de tecnicismo apropiado (hablar como colega técnico o como ejecutivo), longitud y velocidad de mensajes recomendada.\n\n4. DRIVERS DE ENERGÍA\n¿Qué lo/la mueve profesionalmente? Reconocimiento público, impacto en el negocio, estabilidad y seguridad, ser el experto/a referente, autonomía, dinero, pertenencia al equipo. Basa en evidencia del perfil, no en suposiciones de cargo o industria.\n\n5. HALLAZGOS DE INVESTIGACIÓN\nDatos relevantes de la empresa: tamaño, etapa (startup/scaleup/corporación), industria, posición competitiva, tecnologías usadas. Señales de timing: cargo nuevo (menos de 12 meses)? empresa en crecimiento o reestructuración? cambios recientes visibles? Contexto personal que humanice el primer contacto.\n\nResponde con un objeto JSON válido con estas claves exactas:\npersonality_traits, behavior_summary, communication_guide, energy_drivers, disc_type, research_output\n\nSin markdown. Sin código de bloque. Sin texto adicional. Solo el JSON.`;\n\nreturn [{json: {...ctx, _prompt_a1: prompt}}];"
+      },
+      "name": "Bridge Agent 1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2144,
+        6352
+      ],
+      "id": "65ef5377-afd6-4145-8b1c-a9e2b384ab76"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a1 }}"
+      },
+      "name": "AGENTE 1a - Context Synthesis",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        -1872,
+        6160
+      ],
+      "id": "3e53e668-3c7c-4b36-b931-cdadf0975104"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-sonnet-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 2000,
+          "temperature": 0.3
+        }
+      },
+      "name": "Anthropic Agente 1a",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -1872,
+        6352
+      ],
+      "id": "eccd1933-dbf0-43d8-93b7-3a8b8d75cb51"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a1 }}"
+      },
+      "name": "AGENTE 1b - Context Synthesis",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        -1872,
+        6560
+      ],
+      "id": "7fbc30df-21df-4523-bc8c-74c472188254"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-sonnet-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 2000,
+          "temperature": 0.7
+        }
+      },
+      "name": "Anthropic Agente 1b",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -1872,
+        6752
+      ],
+      "id": "810686f7-6b49-46b3-9a92-4f4607decfb4"
+    },
+    {
+      "parameters": {},
+      "name": "Merge Agent 1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        -1600,
+        6352
+      ],
+      "id": "91c8686a-57b2-4b42-aa4f-5f4c885938ee"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst ctx = $('Bridge Agent 1').first().json;\nlet v1 = {}, v2 = {};\ntry { const m = (items[0]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v1=JSON.parse(m[0]); } catch(e) {}\ntry { const m = (items[1]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v2=JSON.parse(m[0]); } catch(e) {}\nconst h1 = Object.keys(v1).length > 0;\nconst h2 = Object.keys(v2).length > 0;\nconst best = h1&&h2 ? (JSON.stringify(v1).length>=JSON.stringify(v2).length?v1:v2) : (h1?v1:v2);\nreturn [{json: {\n  ...ctx,\n  personality_traits: best.personality_traits||'',\n  behavior_summary: best.behavior_summary||'',\n  communication_guide: best.communication_guide||'',\n  energy_drivers: best.energy_drivers||'',\n  disc_type: best.disc_type||'',\n  research_output: best.research_output||'',\n  agente1_output: JSON.stringify(best)\n}}];"
+      },
+      "name": "Selector Agent 1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1408,
+        6352
+      ],
+      "id": "12e330e7-da48-4806-bbd9-c220bc2439e8"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ctx = $input.first().json;\nconst perfil = ctx.perfilParaAgente || '';\nconst a1 = ctx.agente1_output || '';\n\nconst prompt = `Eres un analista de ventas B2B especializado en diagnóstico de dolor empresarial y match entre problemas y soluciones. Tu misión es identificar los dolores más urgentes de este prospecto y evaluar honestamente el fit con la solución que se ofrece.\n\nPERFIL COMPLETO DEL PROSPECTO:\n${perfil}\n\nANÁLISIS DE PERSONALIDAD (AGENTE 1):\n${a1}\n\nINSTRUCCIONES:\n\n1. LAS 8 DECLARACIONES DE PROBLEMAS\nGenera 8 frases que el prospecto diría en primera persona, en su monólogo interno o en una reunión con su equipo. Deben ser específicas para su cargo, empresa e industria. NUNCA genéricas. Separa con el símbolo | entre cada declaración.\nEjemplo malo: 'No tenemos suficientes leads.'\nEjemplo bueno: 'Mis vendedores pierden tiempo con prospectos que nunca van a comprar y yo no tengo visibilidad de por qué se caen las oportunidades.'\nCubre 4 tipos: operacionales (dolor día a día), estratégicos (largo plazo), de equipo (gestión de personas), de presión externa (competencia, directivos, mercado).\n\n2. MATCH CON LA SOLUCIÓN\nLee CUIDADOSAMENTE la sección CONTEXTO SOLICITANTE del perfil. Evalúa honestamente: ¿algún dolor es resuelto por la solución? ¿El prospecto cumple el perfil ICP? Un match débil merece honestidad, no optimismo. Describe el fit real.\n\n3. VARIABLES DE DOLOR\nCuantifica el dolor cuando sea posible: tiempo perdido por semana, costo estimado del problema, oportunidades perdidas, riesgo de compliance, impacto en el equipo o en los resultados. Estas variables son el combustible del outreach.\n\n4. CAUSA RAÍZ Y CONSECUENCIA\nCausa raíz: el problema detrás del síntoma. No 'no tienen leads' sino 'no tienen proceso definido de ICP y sus vendedores califican por intuición'. Consecuencia: qué pasa concretamente en 6-12 meses si no resuelve este problema, específico para su cargo y empresa.\n\n5. PRUEBA SOCIAL IDEAL\n¿Qué tipo de evidencia lo/la convencería más? Caso de empresa del mismo tamaño e industria, benchmark del sector con datos duros, testimonio de alguien con su mismo cargo, dato de ROI medible.\n\n6. SELECCIÓN DEL DOLOR PRINCIPAL\nElige el dolor más urgente y con mejor match con la solución ofrecida. Crea una etiqueta corta en kebab-case para identificarlo (ej: falta-visibilidad-pipeline, proceso-ventas-sin-estructura).\n\nResponde con un objeto JSON válido con estas claves exactas:\ndeclaraciones_problemas, match_reason, variables_dolor, problema_causa, consecuencia, prueba_social, selected_pain_id\n\nSin markdown. Sin texto adicional. Solo el JSON.`;\n\nreturn [{json: {...ctx, _prompt_a2: prompt}}];"
+      },
+      "name": "Bridge Agent 2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1232,
+        6352
+      ],
+      "id": "aee40190-9569-4457-af17-aa5488c0dc31"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a2 }}"
+      },
+      "name": "AGENTE 2a - Proof Selector",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        -928,
+        6208
+      ],
+      "id": "1189933d-6b89-4d99-bb4a-72dc75a84bfc"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-sonnet-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 2000,
+          "temperature": 0.3
+        }
+      },
+      "name": "Anthropic Agente 2a",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -912,
+        6400
+      ],
+      "id": "abc256e0-c744-4506-b667-f1e53159c3c3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a2 }}"
+      },
+      "name": "AGENTE 2b - Proof Selector",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        -944,
+        6560
+      ],
+      "id": "cbe3b593-d3c3-4a07-813a-44cc9a56744e"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-sonnet-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 2000,
+          "temperature": 0.7
+        }
+      },
+      "name": "Anthropic Agente 2b",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -960,
+        6816
+      ],
+      "id": "56d61647-79af-4938-aff4-68830f81bca5"
+    },
+    {
+      "parameters": {},
+      "name": "Merge Agent 2",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        -592,
+        6384
+      ],
+      "id": "e01a8bc5-be44-4e44-997f-2880f7e0bf29"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst ctx = $('Bridge Agent 2').first().json;\nlet v1 = {}, v2 = {};\ntry { const m = (items[0]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v1=JSON.parse(m[0]); } catch(e) {}\ntry { const m = (items[1]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v2=JSON.parse(m[0]); } catch(e) {}\nconst h1 = Object.keys(v1).length > 0;\nconst h2 = Object.keys(v2).length > 0;\nconst best = h1&&h2 ? (JSON.stringify(v1).length>=JSON.stringify(v2).length?v1:v2) : (h1?v1:v2);\nreturn [{json: {\n  ...ctx,\n  declaraciones_problemas: best.declaraciones_problemas||'',\n  match_reason: best.match_reason||'',\n  variables_dolor: best.variables_dolor||'',\n  problema_causa: best.problema_causa||'',\n  consecuencia: best.consecuencia||'',\n  prueba_social: best.prueba_social||'',\n  selected_pain_id: best.selected_pain_id||'',\n  agente2_output: JSON.stringify(best)\n}}];"
+      },
+      "name": "Selector Agent 2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        6384
+      ],
+      "id": "b8ff342c-ce35-4aad-91ad-16b80189665f"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ctx = $input.first().json;\nconst perfil = ctx.perfilParaAgente || '';\nconst a1 = ctx.agente1_output || '';\nconst a2 = ctx.agente2_output || '';\n\nconst prompt = `Eres un estratega de ventas B2B con expertise en Challenger Sale, SPIN Selling y Value Selling. Tu misión es construir la hipótesis de motor de compra: la tensión específica que haría que ESTA persona, en ESTE momento preciso, tome acción y no lo aplace.\n\nPERFIL DEL PROSPECTO:\n${perfil}\n\nANÁLISIS ACUMULADO:\nPersonalidad y comportamiento: ${a1}\nDolores identificados: ${a2}\n\nFRAMEWORK: MOTOR DE COMPRA\n\nUn motor de compra efectivo tiene 3 componentes obligatorios:\nTENSIÓN: la brecha concreta entre donde está HOY y donde necesita/quiere estar para cumplir sus objetivos\nURGENCIA: por qué actuar AHORA y no en 6 meses. Debe ser un trigger real: presión externa, ventana de oportunidad, consecuencia que escala si no actúa\nCONSECUENCIA: qué pierde concretamente si no actúa en los próximos 90 días\n\nMotores de compra comunes (úsalos como referencia, personaliza para este caso):\n- Cargo nuevo (<12 meses): necesita mostrar resultados rápido para legitimarse ante directivos\n- Empresa en hipercrecimiento: procesos actuales no escalan, el caos operacional crece con cada contratación\n- Pérdida reciente de cliente importante o faltó cuota: presión de directivos, necesita cambio visible\n- Cambio en el mercado o competidores adoptando nueva tecnología: riesgo de quedar atrás\n- Presupuesto disponible + fin de año fiscal: ventana de aprobación limitada en el tiempo\n- Fracaso de iniciativa similar anterior: ahora están más receptivos a alternativas externas\n\nÁNGULO DE SOLUCIÓN PERSONALIZADO:\nNO es cómo funciona la solución en abstracto. Es cómo la solución resuelve ESPECÍFICAMENTE la tensión de ESTE prospecto. Usa su industria, tamaño de empresa, cargo actual, el dolor principal identificado, y el motor como punto de partida.\n\nResponde con un objeto JSON válido con estas claves exactas:\nmotor_hipotesis, solucion\n\nSin markdown. Sin texto adicional. Solo el JSON.`;\n\nreturn [{json: {...ctx, _prompt_a3: prompt}}];"
+      },
+      "name": "Bridge Agent 3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        6384
+      ],
+      "id": "05cc9db2-ff3f-4fda-ac9b-3263949d6d36"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a3 }}"
+      },
+      "name": "AGENTE 3a - Hypothesis Engine",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        64,
+        6192
+      ],
+      "id": "a431dc33-71e6-4362-b5c6-03c86b0bc505"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-opus-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Opus 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 1500,
+          "temperature": 0.3
+        }
+      },
+      "name": "Anthropic Agente 3a",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        6384
+      ],
+      "id": "be95373e-6b8c-4a16-8ba3-8d0c701591fb"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a3 }}"
+      },
+      "name": "AGENTE 3b - Hypothesis Engine",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        80,
+        6512
+      ],
+      "id": "82df4628-7b68-4eee-adce-f86b50aa5974"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-opus-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Opus 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 1500,
+          "temperature": 0.7
+        }
+      },
+      "name": "Anthropic Agente 3b",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        6736
+      ],
+      "id": "99a73679-7603-410e-8eb5-54f4ebdf9f10"
+    },
+    {
+      "parameters": {},
+      "name": "Merge Agent 3",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        384,
+        6352
+      ],
+      "id": "2c594e63-24c2-467e-a650-f367f040ff18"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst ctx = $('Bridge Agent 3').first().json;\nlet v1 = {}, v2 = {};\ntry { const m = (items[0]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v1=JSON.parse(m[0]); } catch(e) {}\ntry { const m = (items[1]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v2=JSON.parse(m[0]); } catch(e) {}\nconst h1 = Object.keys(v1).length > 0;\nconst h2 = Object.keys(v2).length > 0;\nconst best = h1&&h2 ? (JSON.stringify(v1).length>=JSON.stringify(v2).length?v1:v2) : (h1?v1:v2);\nreturn [{json: {\n  ...ctx,\n  motor_hipotesis: best.motor_hipotesis||'',\n  solucion: best.solucion||'',\n  agente3_output: JSON.stringify(best)\n}}];"
+      },
+      "name": "Selector Agent 3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        6352
+      ],
+      "id": "fe5cdec0-23b4-4c39-9291-decc94c7c539"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ctx = $input.first().json;\nconst perfil = ctx.perfilParaAgente || '';\nconst a1 = ctx.agente1_output || '';\nconst a2 = ctx.agente2_output || '';\nconst a3 = ctx.agente3_output || '';\n\nconst prompt = `Eres un director de ventas B2B con 10+ años entrenando equipos en acercamiento inicial de alto impacto. Tu misión es definir el enfoque estratégico óptimo para el primer contacto con este prospecto y los talking points que generarán resonancia genuina, no rechazo.\n\nPERFIL DEL PROSPECTO:\n${perfil}\n\nANÁLISIS ACUMULADO:\nPersonalidad y comportamiento: ${a1}\nDolores identificados: ${a2}\nMotor de compra y solución: ${a3}\n\nENFOQUES DE ACERCAMIENTO DISPONIBLES:\n\nEDUCACIONAL: Llegas con un insight que cambia su forma de ver algo que afecta su negocio. 'Encontré algo sobre empresas en tu industria que creo te sorprendería...'. Mejor para: perfil C (Concienzudo), roles técnicos o analíticos, personas que valoran el expertise por encima de la relación.\n\nDIRECTO: Vas al problema identificado sin rodeos, con confianza. 'Vi que estás liderando X en Y empresa, y muchas personas en tu posición me dicen que Z es un problema real. ¿Te suena?'. Mejor para: perfil D (Dominante), C-Suite o VPs, ejecutivos con poco tiempo y alta carga decisional.\n\nCONSULTIVO: Llegas con preguntas que generan reflexión y hacen que ELLOS descubran el problema contigo. 'Me pregunto si en tu rol actual ya están enfrentando...'. Mejor para: perfil S (Estable), gerentes de equipos, personas relacionales que valoran ser escuchadas antes de ser vendidas.\n\nPROVOCADOR (Challenger): Cuestionas el status quo con evidencia que les incomoda productivamente. 'La mayoría de empresas de tu tamaño en tu industria siguen haciendo X, pero los datos muestran que eso genera Y problema invisible...'. Mejor para: perfiles que han visto muchos vendedores y ya están inmunizados, o cuando necesitas diferenciarte radicalmente.\n\nTALKING POINTS:\nGenera 5 puntos específicos para UNA conversación inicial de 10-15 minutos. NO son beneficios del producto. Son ganchos de conversación y preguntas específicas para ESTE prospecto basadas en su contexto real. Separa con | entre cada punto.\nEjemplo incorrecto: 'Nuestra plataforma mejora la conversión 30%'\nEjemplo correcto: 'Vi que usan [tecnología X], que generalmente indica que están buscando [objetivo Y]. ¿Cómo les está yendo con eso actualmente?'\n\nCTAs recomendados por perfil DISC para incluir en el approach:\nD: '15 minutos esta semana, te muestro algo específico para el contexto de [empresa]'\nI: '¿Agendamos una llamada? Creo que hay algo relevante para lo que están construyendo'\nS: '¿Tiene sentido explorar si aplica a tu caso? Sin compromiso, solo para ver si hay fit'\nC: 'Te mando primero un caso de empresa similar para que lo revises tú antes de que hablemos'\n\nResponde con un objeto JSON válido con estas claves exactas:\ntalking_points, approach\n\nSin markdown. Sin texto adicional. Solo el JSON.`;\n\nreturn [{json: {...ctx, _prompt_a4: prompt}}];"
+      },
+      "name": "Bridge Agent 4",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        6352
+      ],
+      "id": "288d02c3-209b-4783-985b-1063fe92a967"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a4 }}"
+      },
+      "name": "AGENTE 4a - Strategy + CTA",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        1216,
+        6112
+      ],
+      "id": "b419a4ce-90f4-4262-8fdf-f036dedec9ee"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-opus-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Opus 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 1500,
+          "temperature": 0.3
+        }
+      },
+      "name": "Anthropic Agente 4a",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1216,
+        6320
+      ],
+      "id": "5c747159-131c-4f27-81fb-9136b5597703"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a4 }}"
+      },
+      "name": "AGENTE 4b - Strategy + CTA",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        1216,
+        6464
+      ],
+      "id": "80809611-f8c4-412b-bcb1-430fe0280356"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-opus-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Opus 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 1500,
+          "temperature": 0.7
+        }
+      },
+      "name": "Anthropic Agente 4b",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1216,
+        6640
+      ],
+      "id": "37ee2b74-243d-4434-a37c-a9d384b2d525"
+    },
+    {
+      "parameters": {},
+      "name": "Merge Agent 4",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1584,
+        6352
+      ],
+      "id": "9bd9e833-df39-43d4-9f12-9cace002d358"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst ctx = $('Bridge Agent 4').first().json;\nlet v1 = {}, v2 = {};\ntry { const m = (items[0]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v1=JSON.parse(m[0]); } catch(e) {}\ntry { const m = (items[1]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v2=JSON.parse(m[0]); } catch(e) {}\nconst h1 = Object.keys(v1).length > 0;\nconst h2 = Object.keys(v2).length > 0;\nconst best = h1&&h2 ? (JSON.stringify(v1).length>=JSON.stringify(v2).length?v1:v2) : (h1?v1:v2);\nreturn [{json: {\n  ...ctx,\n  talking_points: best.talking_points||'',\n  approach: best.approach||'',\n  agente4_output: JSON.stringify(best)\n}}];"
+      },
+      "name": "Selector Agent 4",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        6352
+      ],
+      "id": "237e6238-ea36-42c9-a7bb-9c2493c89623"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ctx = $input.first().json;\nconst perfil = ctx.perfilParaAgente || '';\nconst a1 = ctx.agente1_output || '';\nconst a2 = ctx.agente2_output || '';\nconst a3 = ctx.agente3_output || '';\nconst a4 = ctx.agente4_output || '';\n\nconst prompt = `Eres el mejor copywriter B2B de habla hispana especializado en outreach personalizado que genera respuestas reales. Tu copy NO suena a vendedor: suena a alguien que investigó profundamente, entiende el contexto de la persona y llega con algo genuinamente relevante para su situación.\n\nPERFIL COMPLETO DEL PROSPECTO:\n${perfil}\n\nESTRATEGIA COMPLETA DEFINIDA:\nPersonalidad y comportamiento: ${a1}\nDolores identificados: ${a2}\nMotor de compra y ángulo de solución: ${a3}\nEnfoque estratégico y talking points: ${a4}\n\nREGLAS ABSOLUTAS (violar cualquiera = copy rechazado):\n1. Usa el nombre del prospecto en el primer párrafo de cada pieza\n2. Referencia ALGO ESPECÍFICO y verificablemente real del perfil: empresa actual, cargo exacto, tecnología que usan, logro visible en LinkedIn, dato de la industria, contexto de la empresa. NADA genérico que pueda enviarse a cualquiera.\n3. Emails: máximo 150 palabras en el cuerpo, 1 sola CTA, sin bullet points en el primer email, sin párrafos de más de 3 líneas, sin jergón corporativo\n4. LinkedIn: máximo 280 caracteres, NO menciones explícitamente que quieres venderle algo, NO uses frases como 'tengo una solución', 'quiero presentarte', 'te puedo ayudar'. Conecta como persona, no como vendedor.\n5. Pitches para llamada: habla como persona que tuvo una conversación previa, no como folleto corporativo\n6. Cold calls: incluye cómo responder cuando dice 'no tengo tiempo ahora' y cuando dice 'mándame un email'\n7. Secuencia de seguimiento: email 2 es seguimiento suave que referencia el primero y agrega un ángulo nuevo, email 3 aporta valor real (insight de industria, dato, recurso útil), email 4 es breakup honesto y directo que deja la puerta completamente abierta sin presión\n8. El asunto del email: genera curiosidad genuina, es específico pero intrigante, sin clickbait, máximo 8 palabras\n\nFORMATOS EXACTOS REQUERIDOS:\ncold_email_1 y cold_email_2: Primera línea debe ser 'Asunto: [el asunto]', luego una línea en blanco, luego el cuerpo completo del email\ncold_call_1 y cold_call_2: Usa este formato: [Apertura - primeras palabras al descolgar] | [Propuesta de valor en 10 segundos] | [Respuesta si dice 'no tengo tiempo'] | [Respuesta si dice 'mándame un email'] | [CTA final]\npitch_comercial_1: Metodología PAS completa (Problema específico del prospecto → Agitación de la consecuencia → Solución posicionada para su contexto)\npitch_comercial_2: Metodología Historia→Prueba Social→Invitación a explorar (cuenta una historia de cliente similar → prueba con dato o resultado → invita a explorar si aplica)\n\nResponde con un objeto JSON válido con estas claves exactas:\nlinkedin_mensaje, pitch_comercial_1, pitch_comercial_2, cold_email_1, cold_email_2, cold_call_1, cold_call_2, secuencia_email_2, secuencia_email_3, secuencia_email_4, email_subject\n\nSin markdown. Sin texto adicional. Solo el JSON.`;\n\nreturn [{json: {...ctx, _prompt_a5: prompt}}];"
+      },
+      "name": "Bridge Agent 5",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        6352
+      ],
+      "id": "be3115b9-dd3c-4771-8f15-7c1d16bfc45c"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a5 }}"
+      },
+      "name": "AGENTE 5a - Copy Generator",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        2384,
+        6128
+      ],
+      "id": "0c253715-b66e-433e-a8c9-9475a162be45"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-opus-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Opus 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 4096,
+          "temperature": 0.4
+        }
+      },
+      "name": "Anthropic Agente 5a",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        2384,
+        6320
+      ],
+      "id": "2b7b229b-6df7-4528-a091-93fc3ebc8f8d"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json._prompt_a5 }}"
+      },
+      "name": "AGENTE 5b - Copy Generator",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        2384,
+        6528
+      ],
+      "id": "eba316a0-43be-4129-bdd3-ff1568f201b1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-opus-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Opus 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 4096,
+          "temperature": 0.7
+        }
+      },
+      "name": "Anthropic Agente 5b",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        2368,
+        6736
+      ],
+      "id": "7f3e907c-85e1-4a19-93da-096d7f483554"
+    },
+    {
+      "parameters": {},
+      "name": "Merge Agent 5",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        2736,
+        6320
+      ],
+      "id": "aa5ead5b-76fc-4614-af9b-498e06f6ff6a"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst ctx = $('Bridge Agent 5').first().json;\nlet v1 = {}, v2 = {};\ntry { const m = (items[0]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v1=JSON.parse(m[0]); } catch(e) {}\ntry { const m = (items[1]?.json?.text||'').match(/\\{[\\s\\S]*\\}/); if(m) v2=JSON.parse(m[0]); } catch(e) {}\nconst h1 = Object.keys(v1).length > 0;\nconst h2 = Object.keys(v2).length > 0;\nconst best = h1&&h2 ? (JSON.stringify(v1).length>=JSON.stringify(v2).length?v1:v2) : (h1?v1:v2);\nreturn [{json: {\n  ...ctx,\n  linkedin_mensaje: best.linkedin_mensaje||'',\n  pitch_comercial_1: best.pitch_comercial_1||'',\n  pitch_comercial_2: best.pitch_comercial_2||'',\n  cold_email_1: best.cold_email_1||'',\n  cold_email_2: best.cold_email_2||'',\n  cold_call_1: best.cold_call_1||'',\n  cold_call_2: best.cold_call_2||'',\n  secuencia_email_2: best.secuencia_email_2||'',\n  secuencia_email_3: best.secuencia_email_3||'',\n  secuencia_email_4: best.secuencia_email_4||'',\n  email_subject: best.email_subject||'',\n  agente5_output: JSON.stringify(best)\n}}];"
+      },
+      "name": "Selector Agent 5",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3008,
+        6320
+      ],
+      "id": "452c0487-288f-436a-b21e-063b96acfd81"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-opus-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Opus 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 2000,
+          "temperature": 0.2
+        }
+      },
+      "name": "Anthropic Agente 6",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        3296,
+        6496
+      ],
+      "id": "12a8aae0-9959-448a-871d-eb12e3b07086"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1",
+              "name": "lead_db_id",
+              "value": "={{ $json.lead_db_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f2",
+              "name": "email_lead",
+              "value": "={{ $json.email || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "f3",
+              "name": "nombre_lead",
+              "value": "={{ ($json.nombre || '') + ' ' + ($json.apellido || '') }}",
+              "type": "string"
+            },
+            {
+              "id": "f4",
+              "name": "perfilParaAgente",
+              "value": "={{ $json.perfilParaAgente || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "f5",
+              "name": "cargo_lead",
+              "value": "={{ $json.cargo || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "f6",
+              "name": "empresa_lead",
+              "value": "={{ $json.empresa || '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Extraer Campos1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2432,
+        6352
+      ],
+      "id": "8898d10d-a2ac-4085-acdd-9ba5568bdbdc"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Eres un auditor senior de calidad de outreach B2B. Has revisado miles de secuencias de ventas y sabes exactamente qué genera respuestas reales y qué va directo a la papelera. Tu criterio es implacable, tu feedback es concreto y accionable.\n\nPERFIL DEL PROSPECTO:\n{{ $json.perfilParaAgente }}\n\nANÁLISIS DE PERSONALIDAD:\n{{ $json.agente1_output }}\n\nDOLORES IDENTIFICADOS:\n{{ $json.agente2_output }}\n\nMOTOR DE COMPRA:\n{{ $json.agente3_output }}\n\nESTRATEGIA ELEGIDA:\n{{ $json.agente4_output }}\n\nCOPY GENERADO:\n{{ $json.agente5_output }}\n\nCRITERIOS DE EVALUACIÓN (100 pts total):\nA. Personalización real con datos específicos del prospecto [0-30 pts]: ¿usa información verificable del perfil o podría enviarse a cualquier persona en la industria?\nB. Relevancia y precisión del dolor identificado [0-25 pts]: ¿el dolor resuena genuinamente con el perfil o es genérico para el cargo?\nC. Calidad del copy: claridad, brevedad, ausencia de jergón corporativo [0-20 pts]\nD. CTA específico y accionable [0-15 pts]: ¿el lector sabe exactamente qué hacer y cuánto esfuerzo le demanda?\nE. Coherencia DISC-Tono: el tono y estilo del copy matchea la personalidad identificada [0-10 pts]\n\nSELECCIÓN DEL MEJOR EMAIL:\nCompara cold_email_1 vs cold_email_2. Elige el que tenga: mejor hook en las primeras 2 líneas, referencia más específica al prospecto, CTA más claro y de menor fricción. Entrega solo el CUERPO del email seleccionado, sin la línea que comienza con 'Asunto:'.\n\nEXTRACCIÓN EJECUTIVA:\nUn vendedor tiene 30 segundos antes de una llamada en frío con este prospecto. Dale exactamente lo que necesita: quién es, por qué podría estar interesado, qué decir en los primeros 10 segundos, qué NO mencionar bajo ninguna circunstancia, y si hay una señal de timing que aprovechar.\n\nResponde con un objeto JSON válido con estas claves exactas:\nscore (número entero 0-100), score_justificacion, extraccion, email_generado\n\nSin markdown. Sin texto adicional. Solo el JSON."
+      },
+      "name": "AGENTE 6 - QA Auditor1",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        3296,
+        6320
+      ],
+      "id": "7e9134af-9309-4791-b779-be1617c1e2c7"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.first().json.text || '';\nconst ctx = $('Selector Agent 5').first().json;\nlet a6 = {};\ntry { const m = text.match(/\\{[\\s\\S]*\\}/); if(m) a6=JSON.parse(m[0]); } catch(e) {}\n\nconst leadId = ctx.lead_db_id || '';\nconst hash = parseInt(leadId.replace(/-/g,'').substring(0,8),16)||0;\nconst vendedorIndex = hash % 3;\n\nconst patchBody = {\n  personality_traits: ctx.personality_traits||'',\n  behavior_summary: ctx.behavior_summary||'',\n  communication_guide: ctx.communication_guide||'',\n  energy_drivers: ctx.energy_drivers||'',\n  disc_type: ctx.disc_type||'',\n  research_output: ctx.research_output||'',\n  declaraciones_problemas: ctx.declaraciones_problemas||'',\n  match_reason: ctx.match_reason||'',\n  variables_dolor: ctx.variables_dolor||'',\n  problema_causa: ctx.problema_causa||'',\n  consecuencia: ctx.consecuencia||'',\n  prueba_social: ctx.prueba_social||'',\n  selected_pain_id: ctx.selected_pain_id||'',\n  motor_hipotesis: ctx.motor_hipotesis||'',\n  solucion: ctx.solucion||'',\n  talking_points: ctx.talking_points||'',\n  linkedin_mensaje: ctx.linkedin_mensaje||'',\n  linkedin_msg: ctx.linkedin_mensaje||'',\n  pitch_comercial_1: ctx.pitch_comercial_1||'',\n  pitch_comercial_2: ctx.pitch_comercial_2||'',\n  cold_email_1: ctx.cold_email_1||'',\n  cold_email_2: ctx.cold_email_2||'',\n  cold_call_1: ctx.cold_call_1||'',\n  cold_call_2: ctx.cold_call_2||'',\n  secuencia_email_2: ctx.secuencia_email_2||'',\n  secuencia_email_3: ctx.secuencia_email_3||'',\n  secuencia_email_4: ctx.secuencia_email_4||'',\n  email_subject: ctx.email_subject||'',\n  score: parseFloat(a6.score)||null,\n  score_justificacion: a6.score_justificacion||'',\n  extraccion: a6.extraccion||'',\n  email_generado: a6.email_generado||ctx.cold_email_1||'',\n  status: 'completed',\n  processed_at: new Date().toISOString()\n};\n\nreturn [{json: {\n  ...ctx,\n  supabase_patch_body: patchBody,\n  email_lead: ctx.email_lead||ctx.email||'',\n  email_subject_final: ctx.email_subject||'Mensaje para ti',\n  email_body_final: a6.email_generado||ctx.cold_email_1||'',\n  vendedor_index: vendedorIndex\n}}];"
+      },
+      "name": "Parse Agente 6 + Build PATCH1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3568,
+        6320
+      ],
+      "id": "fa1c0a7b-dde5-44c6-bf85-c9feeb4efc57"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://azqtuvgtmmswvqgyrvct.supabase.co/rest/v1/leads_agentes?lead_id=eq.{{ $json.lead_db_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.supabase_patch_body) }}",
+        "options": {}
+      },
+      "name": "UPDATE leads_agentes1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3856,
+        6320
+      ],
+      "id": "7c864b1e-c333-4f9d-9f48-a71d34461de3",
+      "onError": "continueRegularOutput",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "prospeccion-apollo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "name": "Formulario GHL1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -3696,
+        5408
+      ],
+      "id": "f80f1a53-1203-465e-8423-32896b0fbbdc",
+      "webhookId": "prospeccion-apollo"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst input = body.record || body;\nconst solicitudId = input.id || null;\n\nconst SB = 'https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\n\nconst debug = { fetchAvailable: typeof fetch, helpersAvailable: typeof this.helpers };\nlet organizacionId = input.organizacion_id || null;\nlet orgError = null;\n\nif (!organizacionId && input.organizacion) {\n  try {\n    const resp = await this.helpers.httpRequest({\n      method: 'POST',\n      url: SB + '/rest/v1/organizaciones',\n      headers: {\n        apikey: SK,\n        Authorization: 'Bearer ' + SK,\n        'Content-Type': 'application/json',\n        'Prefer': 'return=representation,resolution=merge-duplicates'\n      },\n      body: {\n        nombre: input.organizacion || 'Sin nombre',\n        industria: input.industry || null,\n        pais: input.company_country || input.person_country || null\n      },\n      json: true\n    });\n    organizacionId = (Array.isArray(resp) ? resp[0] : resp)?.id || null;\n  } catch (e) {\n    orgError = e.message || String(e);\n  }\n}\n\nlet patchError = null;\nif (solicitudId && organizacionId) {\n  try {\n    await this.helpers.httpRequest({\n      method: 'PATCH',\n      url: SB + '/rest/v1/solicitudes_leads?id=eq.' + solicitudId,\n      headers: {\n        apikey: SK,\n        Authorization: 'Bearer ' + SK,\n        'Content-Type': 'application/json'\n      },\n      body: { organizacion_id: organizacionId, status: 'processing' },\n      json: true\n    });\n  } catch (e) {\n    patchError = e.message || String(e);\n  }\n}\n\nconst base = 'https://api.apollo.io/api/v1/mixed_people/api_search';\nconst parts = [];\nconst enc = encodeURIComponent;\nconst add = (k, v) => { if (v !== null && v !== undefined && v !== '') parts.push(enc(k) + '=' + enc(String(v))); };\nadd('per_page', input.max_results || input.cantidad_leads || 25);\nconst titles = [...(input.job_titles || []), ...(input.titulos_adicionales || [])];\ntitles.forEach(t => add('person_titles[]', t));\n(input.seniority || []).forEach(s => add('person_seniorities[]', s));\n(input.departments || []).forEach(d => add('person_departments[]', d));\nif (input.person_country) add('person_locations[]', input.person_country);\nif (input.company_name) add('q_organization_name', input.company_name);\nif (input.company_country) add('organization_locations[]', input.company_country);\nif (input.company_city) add('organization_locations[]', input.company_city);\nif (input.employee_min && input.employee_max) add('organization_num_employees_ranges[]', input.employee_min + ',' + input.employee_max);\n(input.keywords || []).forEach(k => add('q_keywords', k));\nconst apolloUrl = base + '?' + parts.join('&');\n\nreturn [{\n  json: {\n    solicitudId,\n    organizacionId,\n    apolloUrl,\n    _debug: debug,\n    _orgError: orgError,\n    _patchError: patchError,\n    input,\n    contexto: {\n      solucion: input.solucion,\n      problema_resuelve: input.problema_resuelve,\n      casos_exito: input.casos_exito,\n      diferenciador: input.diferenciador\n    }\n  }\n}];"
+      },
+      "name": "Preparar1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3440,
+        5408
+      ],
+      "id": "697373a0-dbba-4f7a-9825-d9644fc89603"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.apolloUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "APOLLO_KEY_PLACEHOLDER"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3200,
+        5408
+      ],
+      "id": "288eacb8-b72b-4de9-aac0-f5d434205e1f",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "people",
+        "options": {}
+      },
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -2800,
+        5392
+      ],
+      "id": "df040d18-2d7c-43a2-9087-d5d989d8faac",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apollo.io/api/v1/people/match",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "APOLLO_KEY_PLACEHOLDER"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{ $json.id }}\",\n  \"reveal_personal_emails\": false,\n  \"reveal_phone_number\": false\n}",
+        "options": {}
+      },
+      "name": "Apollo Match1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2544,
+        5392
+      ],
+      "id": "9f863c6c-2d01-4cfa-8ca8-490ca7646900"
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "options": {}
+      },
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        -2240,
+        5408
+      ],
+      "id": "5c25482e-e24a-4c1e-ab38-01a5bfa2c78c"
+    },
+    {
+      "parameters": {
+        "jsCode": "const matchItems = $input.all();\nconst searchItems = $('Split Out').all();\nconst prep = $('Preparar1').first().json;\nconst solicitudId = prep.solicitudId;\nconst organizacionId = prep.organizacionId;\n\nconst SB = 'https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\nconst headers = { apikey: SK, Authorization: 'Bearer ' + SK, 'Content-Type': 'application/json', 'Prefer': 'return=representation,resolution=merge-duplicates' };\n\n// Index search results by apollo id so we can fill in gaps when match comes back empty\nconst searchById = {};\nfor (const it of searchItems) {\n  const p = it.json || {};\n  if (p && p.id) searchById[p.id] = p;\n}\n\n// Merge match + search: prefer match value when present, fallback to search value\nfunction merge(a, b) {\n  a = a || {}; b = b || {};\n  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);\n  const out = {};\n  for (const k of keys) {\n    const va = a[k], vb = b[k];\n    if (va !== undefined && va !== null && va !== '') out[k] = va;\n    else if (vb !== undefined && vb !== null && vb !== '') out[k] = vb;\n    else out[k] = va !== undefined ? va : vb;\n  }\n  return out;\n}\n\nconst results = [];\nconst errors = [];\n\nfor (const item of matchItems) {\n  const data = item.json || {};\n  const matchP = data.person || data;\n  const id = matchP?.id || data?.id;\n  if (!id) continue;\n  const searchP = searchById[id] || {};\n  const person = merge(matchP, searchP);\n\n  let linkedinUrl = person.linkedin_url || '';\n  if (linkedinUrl && linkedinUrl.startsWith('http://')) linkedinUrl = linkedinUrl.replace('http://', 'https://');\n  if (linkedinUrl && !linkedinUrl.includes('linkedin.com')) linkedinUrl = '';\n\n  const org = merge(matchP.organization, searchP.organization);\n\n  const leadData = {\n    solicitud_id: solicitudId,\n    organizacion_id: organizacionId,\n    apollo_id: person.id || id,\n    nombre: person.first_name || null,\n    apellido: person.last_name || null,\n    cargo: person.title || null,\n    headline: person.headline || null,\n    seniority: person.seniority || null,\n    departamentos: Array.isArray(person.departments) ? person.departments.join(', ') || null : (person.departments || null),\n    linkedin_url: linkedinUrl || null,\n    email: person.email || null,\n    email_status: person.email_status || null,\n    telefono: (person.phone_numbers && person.phone_numbers[0]?.raw_number) || null,\n    ciudad: person.city || null,\n    estado_region: person.state || null,\n    pais: person.country || null,\n    foto_url: person.photo_url || null,\n    empresa: org.name || null,\n    industria_empresa: org.industry || null,\n    tamano_empresa: org.estimated_num_employees || null,\n    website_empresa: org.website_url || null,\n    linkedin_empresa: org.linkedin_url || null,\n    org_keywords: Array.isArray(org.keywords) ? org.keywords : null,\n    org_short_description: org.short_description || null,\n    org_technology_names: Array.isArray(org.technology_names) ? org.technology_names : null\n  };\n\n  let leadDbId = '';\n  try {\n    const resp = await this.helpers.httpRequest({\n      method: 'POST',\n      url: SB + '/rest/v1/leads?on_conflict=apollo_id',\n      headers,\n      body: leadData,\n      json: true\n    });\n    leadDbId = (Array.isArray(resp) ? resp[0] : resp)?.id || '';\n  } catch (e) {\n    errors.push({ apollo_id: leadData.apollo_id, err: e.message || String(e) });\n  }\n\n  results.push({\n    json: {\n      lead_db_id: leadDbId,\n      apollo_id: leadData.apollo_id,\n      nombre: leadData.nombre,\n      apellido: leadData.apellido,\n      nombre_completo: ((leadData.nombre || '') + ' ' + (leadData.apellido || '')).trim(),\n      cargo: leadData.cargo,\n      linkedin_url: leadData.linkedin_url,\n      email: leadData.email,\n      empresa: leadData.empresa,\n      _errors: errors,\n      ...leadData\n    }\n  });\n}\n\nreturn results;"
+      },
+      "name": "Procesar Datos Apollo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2032,
+        5408
+      ],
+      "id": "5786f046-5204-4fb0-b20c-119030157a38"
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "name": "Loop por Lead1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1584,
+        5552
+      ],
+      "id": "8546c989-b2ec-46c8-9fc1-9bbeaa97810a"
+    },
+    {
+      "parameters": {
+        "jsCode": "// LINKEDIN URL's — Limpia y normaliza URLs\nconst items = $input.all();\nreturn items.map(item => {\n  let url = item.json['LinkedIn URL'] || item.json.linkedin_url || '';\n  url = url.trim();\n  if(url.startsWith('http://')) url = url.replace('http://','https://');\n  if(url && !url.startsWith('http')) url = 'https://'+url;\n  if(url.includes('linkedin.com') && !url.includes('www.linkedin.com')) url = url.replace('linkedin.com','www.linkedin.com');\n  let pubId = '';\n  const match = url.match(/linkedin\\.com\\/in\\/([^/?#]+)/);\n  if(match) pubId = match[1];\n  return {json:{...item.json, linkedinUrl:url, linkedinPublicIdentifier:pubId}};\n});"
+      },
+      "name": "LinkedIn URLs1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1312,
+        5552
+      ],
+      "id": "3ac99483-b189-4e8b-b4e6-add462034957"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/harvestapi~linkedin-profile-scraper/run-sync-get-dataset-items?token=APIFY_TOKEN_PLACEHOLDER",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"publicIdentifiers\": [\"{{ $json.linkedinPublicIdentifier }}\"]\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "name": "Run HarvestAPI1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1104,
+        5552
+      ],
+      "id": "ae83becd-f711-418d-bfa4-7bc77b2f3ac3",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst apolloItems = $('LinkedIn URLs1').all();\nconst SB = 'https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\nconst headers = { apikey: SK, Authorization: 'Bearer ' + SK, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };\n\nconst results = [];\nconst errors = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const liRaw = Array.isArray(items[i].json) ? items[i].json[0] : items[i].json;\n  const liData0 = liRaw || {};\n  const apollo = apolloItems[i]?.json || {};\n  const leadDbId = apollo.lead_db_id || '';\n\n  const exp = Array.isArray(liData0.experience)\n    ? liData0.experience.slice(0,5).map(e => (e.title||'') + ' en ' + (e.companyName||'') + ' (' + (e.duration||'') + ')').join(' | ')\n    : '';\n  const edu = Array.isArray(liData0.education)\n    ? liData0.education.slice(0,3).map(e => (e.degreeName||'') + ' ' + (e.fieldOfStudy||'') + ' - ' + (e.schoolName||'')).join(' | ')\n    : '';\n  const skills = Array.isArray(liData0.skills)\n    ? liData0.skills.map(s => typeof s === 'string' ? s : s.name || '').join(', ')\n    : '';\n  const courses = Array.isArray(liData0.courses)\n    ? liData0.courses.map(c => typeof c === 'string' ? c : c.name || '').join(', ')\n    : '';\n  const projects = Array.isArray(liData0.projects)\n    ? liData0.projects.map(p => (p.title||'') + ': ' + (p.description||'')).join(' | ')\n    : '';\n  const pubs = Array.isArray(liData0.publications)\n    ? liData0.publications.map(p => (p.name || p.title || '')).join(', ')\n    : '';\n  const curPos = Array.isArray(liData0.experience) && liData0.experience.length > 0\n    ? (liData0.experience[0].title||'') + ' en ' + (liData0.experience[0].companyName||'')\n    : '';\n\n  const payload = {\n    lead_id: leadDbId || null,\n    linkedin_public_id: apollo.linkedinPublicIdentifier || '',\n    linkedin_location: liData0.locationName || liData0.geoLocationName || liData0.location || '',\n    headline: liData0.headline || '',\n    summary: liData0.about || liData0.summary || '',\n    experiencia: exp,\n    educacion: edu,\n    skills: skills,\n    ubicacion: liData0.location || liData0.geoLocationName || '',\n    conexiones: parseInt(liData0.connectionsCount) || null,\n    seguidores: parseInt(liData0.followerCount || liData0.followersCount) || null,\n    open_to_work: liData0.isOpenToWork || liData0.openToWork || false,\n    courses: courses || null,\n    hiring: liData0.isHiring || false,\n    current_position: curPos || null,\n    projects: projects || null,\n    publications: pubs || null,\n    recent_news: liData0.recentNews || null\n  };\n\n  if (leadDbId) {\n    try {\n      await this.helpers.httpRequest({\n        method: 'POST',\n        url: SB + '/rest/v1/leads_linkedin',\n        headers,\n        body: payload,\n        json: true\n      });\n    } catch (e) {\n      errors.push({ lead_db_id: leadDbId, err: e.message || String(e) });\n    }\n  }\n\n  results.push({ json: {\n    'Apollo ID': apollo['Apollo ID'] || '',\n    lead_db_id: leadDbId,\n    'LI Headline': payload.headline,\n    'LI Summary': payload.summary,\n    'LI Experiencia': exp,\n    'LI Educación': edu,\n    'LI Skills': skills,\n    'LI Ubicación': payload.ubicacion,\n    'LI Conexiones': String(payload.conexiones || ''),\n    'LI Seguidores': String(payload.seguidores || ''),\n    'LI Open to Work': payload.open_to_work,\n    'LI Courses': courses,\n    'LI Current Position': curPos,\n    'LI Projects': projects,\n    'LI Publications': pubs,\n    'LI Hiring': payload.hiring,\n    'LI Recent News': payload.recent_news,\n    _errors: errors\n  }});\n}\nreturn results;"
+      },
+      "name": "Code in JavaScript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -912,
+        5552
+      ],
+      "id": "d4453ce7-65ca-4c3d-97fb-636795120186"
+    },
+    {
+      "parameters": {
+        "mode": "combineByPosition",
+        "options": {}
+      },
+      "name": "Combinar Apollo + LinkedIn1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        -512,
+        5360
+      ],
+      "id": "3f5a3e28-df23-43b1-ab9e-3e0689e4a904"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst sol = $('Preparar1').first().json;\nconst SB = 'https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\nconst headers = { apikey: SK, Authorization: 'Bearer ' + SK, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };\n\nconst results = [];\nconst errors = [];\n\nfor (const item of items) {\n  const d = item.json;\n  const perfil = '=== DATOS DEL PROSPECTO ===\\n' +\n    'Nombre: ' + (d.nombre||d.Nombre||'') + ' ' + (d.apellido||d.Apellido||'') + '\\n' +\n    'Cargo: ' + (d.cargo||d.Cargo||'') + '\\n' +\n    'Headline: ' + (d.headline||d.Headline||'') + '\\n' +\n    'Seniority: ' + (d.seniority||d.Seniority||'') + '\\n\\n' +\n    'Empresa: ' + (d.empresa||d.Empresa||'') + '\\n' +\n    'Industria: ' + (d.industria_empresa||'') + '\\n' +\n    'Tamaño: ' + (d.tamano_empresa||'') + ' empleados\\n' +\n    'Website: ' + (d.website_empresa||'') + '\\n' +\n    'Keywords web: ' + ((d.org_keywords||[]).join(', ')) + '\\n' +\n    'Descripción: ' + (d.org_short_description||'') + '\\n' +\n    'Tecnologías: ' + ((d.org_technology_names||[]).join(', ')) + '\\n\\n' +\n    'Ciudad: ' + (d.ciudad||d.Ciudad||'') + '\\n' +\n    'País: ' + (d.pais||d['País']||'Chile') + '\\n' +\n    'LinkedIn: ' + (d.linkedin_url||d['LinkedIn URL']||'') + '\\n' +\n    'Email: ' + (d.email||d.Email||'') + '\\n' +\n    'Teléfono: ' + (d.telefono||'') + '\\n\\n' +\n    '=== PERFIL LINKEDIN ===\\n' +\n    'Headline LI: ' + (d['LI Headline']||'N/A') + '\\n' +\n    'Summary: ' + (d['LI Summary']||'N/A') + '\\n' +\n    'Experiencia: ' + (d['LI Experiencia']||'N/A') + '\\n' +\n    'Educación: ' + (d['LI Educación']||'N/A') + '\\n' +\n    'Skills: ' + (d['LI Skills']||'N/A') + '\\n' +\n    'Cursos: ' + (d['LI Courses']||'N/A') + '\\n' +\n    'Proyectos: ' + (d['LI Projects']||'N/A') + '\\n' +\n    'Publicaciones: ' + (d['LI Publications']||'N/A') + '\\n' +\n    'Conexiones: ' + (d['LI Conexiones']||'N/A') + '\\n' +\n    'Seguidores: ' + (d['LI Seguidores']||'N/A') + '\\n' +\n    'Open to Work: ' + (d['LI Open to Work']||false) + '\\n' +\n    'Hiring: ' + (d['LI Hiring']||false) + '\\n' +\n    'Recent News: ' + (d['LI Recent News']||'N/A') + '\\n\\n' +\n    '=== CONTEXTO SOLICITANTE ===\\n' +\n    'Organización: ' + (sol.input?.organizacion||'') + '\\n' +\n    'Solución: ' + (sol.contexto?.solucion||'') + '\\n' +\n    'Problema: ' + (sol.contexto?.problema_resuelve||'') + '\\n' +\n    'Casos éxito: ' + (sol.contexto?.casos_exito||'') + '\\n' +\n    'Diferenciador: ' + (sol.contexto?.diferenciador||'');\n\n  if (d.lead_db_id) {\n    try {\n      await this.helpers.httpRequest({\n        method: 'POST',\n        url: SB + '/rest/v1/leads_agentes',\n        headers,\n        body: { lead_id: d.lead_db_id, perfil_para_agente: perfil, status: 'pending' },\n        json: true\n      });\n    } catch (e) {\n      errors.push({ lead_db_id: d.lead_db_id, err: e.message || String(e) });\n    }\n  }\n  results.push({ json: { ...d, perfilParaAgente: perfil, _agent_errors: errors } });\n}\n\ntry {\n  if (sol.solicitudId) {\n    await this.helpers.httpRequest({\n      method: 'PATCH',\n      url: SB + '/rest/v1/solicitudes_leads?id=eq.' + sol.solicitudId,\n      headers,\n      body: { status: 'completed', leads_found: results.length, processed_at: new Date().toISOString() },\n      json: true\n    });\n  }\n} catch (e) { errors.push({ step: 'patch_solicitud', err: e.message }); }\n\nreturn results;"
+      },
+      "name": "Preparar Data para Agentes1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        5280
+      ],
+      "id": "97db8d92-3f3a-4370-a568-29e00eb6d50d"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1328,
+        5280
+      ],
+      "id": "loop-agentes-moavb88d",
+      "name": "Loop Agentes"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [],
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "parentFolderId": null,
+  "scopes": [
+    "workflow:create",
+    "workflow:delete",
+    "workflow:execute",
+    "workflow:execute-chat",
+    "workflow:list",
+    "workflow:move",
+    "workflow:publish",
+    "workflow:read",
+    "workflow:share",
+    "workflow:unpublish",
+    "workflow:unshare",
+    "workflow:update",
+    "workflow:updateRedactionSetting"
+  ],
+  "canExecute": true
+}

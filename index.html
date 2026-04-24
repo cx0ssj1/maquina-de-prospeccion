@@ -816,6 +816,8 @@
                     <div class="field"><label>Cantidad de leads <span class="req">*</span></label>
                         <select id="cantidadLeads" required>
                             <option value="">— Seleccionar —</option>
+                            <option value="1">1 (Modo Test)</option>
+                            <option value="2">2 (Modo Test)</option>
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="25" selected>25</option>
@@ -856,7 +858,7 @@
                 </div>
                 <div class="checkbox-grid" id="jobTitlesGrid"></div>
                 <div style="margin-top:14px" class="grid">
-                    <div class="toggle-row"><label class="toggle"><input type="checkbox" id="includeSimilar"><span
+                    <div class="toggle-row"><label class="toggle"><input type="checkbox" id="includeSimilar" checked><span
                                 class="slider"></span></label><span class="toggle-label">Include Similar Titles</span>
                     </div>
                 </div>
@@ -880,16 +882,22 @@
                     </div>
                     <div class="field"><label>Department</label>
                         <div class="pill-select" id="departmentSelect">
-                            <div class="pill-option" data-value="business_development">Business Dev</div>
-                            <div class="pill-option" data-value="customer_success">Customer Success</div>
-                            <div class="pill-option" data-value="engineering">Engineering</div>
-                            <div class="pill-option" data-value="executive">Executive</div>
-                            <div class="pill-option" data-value="finance">Finance</div>
-                            <div class="pill-option" data-value="human_resources">HR</div>
-                            <div class="pill-option" data-value="it">IT / Technology</div>
-                            <div class="pill-option" data-value="legal">Legal</div>
-                            <div class="pill-option" data-value="marketing">Marketing</div>
-                            <div class="pill-option" data-value="operations">Operations</div>
+                            <div class="pill-option" data-value="c_suite">C-Suite</div>
+                            <div class="pill-option" data-value="master_corporate_functions">Corporate Functions</div>
+                            <div class="pill-option" data-value="master_engineering_technical">Engineering / Technical</div>
+                            <div class="pill-option" data-value="master_finance">Finance</div>
+                            <div class="pill-option" data-value="master_human_resources">Human Resources</div>
+                            <div class="pill-option" data-value="master_information_technology">IT</div>
+                            <div class="pill-option" data-value="master_legal">Legal</div>
+                            <div class="pill-option" data-value="master_marketing">Marketing</div>
+                            <div class="pill-option" data-value="master_medical_health">Medical / Health</div>
+                            <div class="pill-option" data-value="master_operations">Operations</div>
+                            <div class="pill-option" data-value="master_sales">Sales</div>
+                            <div class="pill-option" data-value="master_consulting">Consulting</div>
+                            <div class="pill-option" data-value="master_product">Product</div>
+                            <div class="pill-option" data-value="master_design">Design</div>
+                            <div class="pill-option" data-value="master_education">Education</div>
+                            <div class="pill-option" data-value="master_support">Support</div>
                         </div>
                     </div>
                 </div>
@@ -1108,6 +1116,41 @@
         document.getElementById('includeSimilar').addEventListener('change', updateFC);
         document.getElementById('jobTitlesGrid').addEventListener('change', updateFC);
 
+        // Map título → sinónimos cercanos (en inglés, formato Apollo). Cuando el usuario
+        // marca un rol común, expandimos con cargos equivalentes para que Apollo no
+        // descarte al lead sólo por una diferencia de nomenclatura.
+        const TITLE_SYNONYMS = {
+            'operations manager': ['logistics manager','supply chain manager','warehouse manager','distribution manager','plant manager','operations director','head of operations'],
+            'operations director': ['operations manager','coo','head of operations','vp operations','director of operations'],
+            'logistics manager': ['operations manager','supply chain manager','warehouse manager','distribution manager','transportation manager','head of logistics','logistics director'],
+            'supply chain manager': ['logistics manager','operations manager','procurement manager','planning manager','inventory manager','head of supply chain','supply chain director'],
+            'warehouse manager': ['logistics manager','operations manager','distribution manager','inventory manager','warehouse supervisor'],
+            'distribution manager': ['logistics manager','operations manager','warehouse manager','transportation manager'],
+            'procurement manager': ['supply chain manager','purchasing manager','sourcing manager','procurement director'],
+            'purchasing manager': ['procurement manager','sourcing manager','supply chain manager'],
+            'plant manager': ['operations manager','production manager','manufacturing manager','factory manager'],
+            'production manager': ['plant manager','manufacturing manager','operations manager'],
+            'ceo': ['founder','co-founder','managing director','president','general manager'],
+            'cfo': ['finance director','head of finance','vp finance','finance manager'],
+            'coo': ['operations director','head of operations','vp operations','operations manager'],
+            'cto': ['technology director','head of technology','vp engineering','engineering director'],
+            'cmo': ['marketing director','head of marketing','vp marketing','marketing manager'],
+            'marketing manager': ['marketing director','head of marketing','brand manager','digital marketing manager'],
+            'sales manager': ['sales director','head of sales','business development manager','commercial manager','account manager'],
+            'it manager': ['it director','head of it','technology manager','systems manager','infrastructure manager'],
+            'hr manager': ['human resources manager','people manager','talent manager','hr director','head of people'],
+            'finance manager': ['finance director','controller','head of finance','financial controller'],
+        };
+        function expandTitles(titles) {
+            const out = new Set();
+            titles.forEach(t => {
+                out.add(t);
+                const key = String(t || '').toLowerCase().trim();
+                (TITLE_SYNONYMS[key] || []).forEach(s => out.add(s));
+            });
+            return [...out];
+        }
+
         function collectData() {
             const selectedTitles = [...document.querySelectorAll('#jobTitlesGrid input:checked')].map(cb => cb.value);
             const customTitles = [...document.querySelectorAll('#customTitlesWrap .tag')].map(t => t.textContent.replace('×', '').trim());
@@ -1116,6 +1159,13 @@
             const keywords = [...document.querySelectorAll('#keywordsWrap .tag')].map(t => t.textContent.replace('×', '').trim());
             const empMin = document.getElementById('employeeMin').value;
             const empMax = document.getElementById('employeeMax').value;
+
+            const includeSimilar = document.getElementById('includeSimilar').checked;
+            const baseTitles = [...selectedTitles, ...customTitles];
+            // Si include_similar está ON, expandimos sinónimos locales para que Apollo
+            // reciba un pool más amplio aunque el usuario tipee mal o use sólo un cargo.
+            const expandedTitles = includeSimilar ? expandTitles(baseTitles) : baseTitles;
+            const addedSynonyms = expandedTitles.filter(t => !baseTitles.includes(t));
 
             return {
                 nombre_completo: document.getElementById('nombreCompleto').value.trim(),
@@ -1126,9 +1176,11 @@
                 problema_resuelve: document.getElementById('problemaResuelve').value.trim() || null,
                 casos_exito: document.getElementById('casosExito').value.trim() || null,
                 diferenciador: document.getElementById('diferenciador').value.trim() || null,
-                job_titles: [...selectedTitles, ...customTitles],
-                include_similar: document.getElementById('includeSimilar').checked,
-                titulos_adicionales: customTitles.length ? customTitles : null,
+                job_titles: expandedTitles,
+                include_similar: includeSimilar,
+                titulos_adicionales: (customTitles.length || addedSynonyms.length)
+                    ? [...customTitles, ...addedSynonyms]
+                    : null,
                 seniority: seniority.length ? seniority : null,
                 departments: departments.length ? departments : null,
                 person_country: document.getElementById('personCountry').value.trim() || null,
@@ -1144,42 +1196,93 @@
             };
         }
 
+        function validateSubmit(data) {
+            const errs = [];
+            if (!data.nombre_completo) errs.push('Nombre completo requerido.');
+            if (!data.email_corporativo) errs.push('Email corporativo requerido.');
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email_corporativo)) errs.push('Email con formato inválido.');
+            if (!data.organizacion) errs.push('Organización requerida.');
+            if (!data.job_titles || !data.job_titles.length) errs.push('Selecciona al menos un Job Title.');
+            if (data.cantidad_leads < 1 || data.cantidad_leads > 500) errs.push('Cantidad de leads debe estar entre 1 y 500.');
+            if (data.employee_min && data.employee_max && data.employee_min > data.employee_max) errs.push('El rango de empleados es inválido (min > max).');
+            return errs;
+        }
+
+        async function postSolicitud(data, { retries = 2, timeoutMs = 25000 } = {}) {
+            let lastErr;
+            for (let i = 0; i <= retries; i++) {
+                const ac = new AbortController();
+                const t = setTimeout(() => ac.abort(), timeoutMs);
+                try {
+                    const resp = await fetch(`${SUPABASE_URL}/rest/v1/solicitudes_leads`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify(data),
+                        signal: ac.signal
+                    });
+                    clearTimeout(t);
+                    if (!resp.ok) {
+                        let errBody; try { errBody = await resp.json(); } catch { errBody = { message: await resp.text().catch(() => '') }; }
+                        const msg = errBody.message || errBody.hint || errBody.details || `HTTP ${resp.status}`;
+                        const err = new Error(msg);
+                        err.status = resp.status;
+                        err.pgCode = errBody.code;
+                        // 4xx (except 408/429) = no retry
+                        if (resp.status < 500 && resp.status !== 408 && resp.status !== 429) throw err;
+                        lastErr = err;
+                        if (i < retries) { await new Promise(r => setTimeout(r, 600 * (i + 1))); continue; }
+                        throw err;
+                    }
+                    const result = await resp.json();
+                    return result;
+                } catch (e) {
+                    clearTimeout(t);
+                    lastErr = e;
+                    if (e.status && e.status < 500 && e.status !== 408 && e.status !== 429) throw e;
+                    if (e.name === 'AbortError' && i < retries) continue;
+                    if ((e.message?.includes('Failed to fetch') || e.name === 'TypeError') && i < retries) {
+                        await new Promise(r => setTimeout(r, 600 * (i + 1))); continue;
+                    }
+                    if (i >= retries) throw e;
+                }
+            }
+            throw lastErr;
+        }
+
         document.getElementById('form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const data = collectData();
-            if (!data.job_titles.length) { toast('Selecciona al menos un Job Title', 'err'); return; }
+
+            const errs = validateSubmit(data);
+            if (errs.length) { toast(errs[0], 'err'); return; }
 
             showLoading('Registrando solicitud en base de datos...');
 
             try {
-                const resp = await fetch(`${SUPABASE_URL}/rest/v1/solicitudes_leads`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Prefer': 'return=representation'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (!resp.ok) {
-                    const err = await resp.json();
-                    throw new Error(err.message || `Error ${resp.status}`);
-                }
-
-                const result = await resp.json();
-                const id = result[0]?.id || 'N/A';
+                const result = await postSolicitud(data);
+                const id = result[0]?.id;
+                if (!id) throw new Error('Supabase respondió OK pero no devolvió ID. Revisa Prefer=return=representation o RLS de lectura.');
 
                 hideLoading();
                 document.getElementById('form').style.display = 'none';
                 document.getElementById('refId').textContent = `REF: ${id.slice(0, 8).toUpperCase()}`;
                 document.getElementById('successCard').classList.add('show');
                 toast('Solicitud registrada correctamente', 'ok');
-
             } catch (err) {
                 hideLoading();
-                toast('Error: ' + err.message, 'err');
+                console.error('submit error:', err);
+                let msg = err.message || String(err);
+                if (err.status === 401 || err.status === 403) msg = 'Permiso denegado por Supabase (RLS). ' + msg;
+                else if (err.name === 'AbortError') msg = 'Timeout. Supabase no respondió. Reintenta en unos segundos.';
+                else if (err.message?.includes('Failed to fetch')) msg = 'Sin conexión. Revisa tu red.';
+                else if (err.pgCode === '23502') msg = 'Falta un campo requerido en la base de datos: ' + msg;
+                else if (err.pgCode === '22P02') msg = 'Un valor tiene formato inválido (posible UUID/número mal): ' + msg;
+                toast('Error: ' + msg, 'err');
             }
         });
 

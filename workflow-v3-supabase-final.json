@@ -1,0 +1,493 @@
+{
+  "name": "Apollo - Máquina de Prospección v3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "prospeccion-apollo",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "name": "Formulario GHL1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -944,
+        1488
+      ],
+      "id": "afc1d699-7a1e-40b8-bea8-9b0c81edbd91",
+      "webhookId": "prospeccion-apollo"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================\n// PREPARAR: Leer solicitud desde DB webhook, upsert org, UPDATE estado, build Apollo URL\n// Dispara desde Supabase DB webhook (INSERT en solicitudes_leads)\n// =============================================\nconst body = $input.first().json.body;\nconst input = body.record || body; // compat: DB webhook {record} o POST directo\nconst solicitudId = input.id || null;\nconst SB = 'https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\nconst h = {'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=representation'};\n\n// 1. Upsert org si no viene organizacion_id\nlet organizacionId = input.organizacion_id || null;\nif (!organizacionId) {\n  try {\n    const orgR = await $helpers.httpRequest({method:'POST',url:SB+'/rest/v1/organizaciones',headers:{...h,'Prefer':'return=representation,resolution=merge-duplicates'},body:JSON.stringify({nombre:input.organizacion||'Sin nombre',industria:input.industry||null,pais:input.company_country||input.person_country||null})});\n    organizacionId = (Array.isArray(orgR)?orgR[0]:orgR)?.id||null;\n  } catch(e){}\n}\n\n// 2. UPDATE solicitud (status processing + organizacion_id)\nif (solicitudId) {\n  try {\n    await $helpers.httpRequest({method:'PATCH',url:SB+'/rest/v1/solicitudes_leads?id=eq.'+solicitudId,headers:h,body:JSON.stringify({status:'processing',organizacion_id:organizacionId})});\n  } catch(e){}\n}\n\n// 3. Build Apollo URL\nconst sm={'C-Level':'c_suite','VP':'vp','Director':'director','Manager':'manager','Senior':'senior','Entry':'entry','c_suite':'c_suite','vp':'vp','director':'director','manager':'manager','senior':'senior','entry':'entry','intern':'intern'};\nconst p = [];\nconst mr = parseInt(input.max_results)||parseInt(input.cantidad_leads)||25;\np.push('per_page='+mr);\n(Array.isArray(input.job_titles)?input.job_titles:[]).forEach(t=>{if(t?.trim())p.push('person_titles[]='+encodeURIComponent(t.trim()));});\nif(input.include_similar&&Array.isArray(input.titulos_adicionales))input.titulos_adicionales.forEach(t=>{if(t?.trim())p.push('person_titles[]='+encodeURIComponent(t.trim()));});\n(Array.isArray(input.seniority)?input.seniority:[]).forEach(s=>{const m=sm[s];if(m)p.push('person_seniorities[]='+m);});\n(Array.isArray(input.departments)?input.departments:[]).forEach(d=>{if(d?.trim())p.push('person_departments[]='+encodeURIComponent(d.trim()));});\nif(input.company_name)p.push('q_organization_name='+encodeURIComponent(input.company_name));\nif(input.employee_min||input.employee_max)p.push('organization_num_employees_ranges[]='+encodeURIComponent((input.employee_min||1)+','+(input.employee_max||10000)));\nconst lp=[];if(input.company_city)lp.push(input.company_city);if(input.person_country)lp.push(input.person_country);else if(input.company_country)lp.push(input.company_country);\nif(lp.length>0)p.push('person_locations[]='+encodeURIComponent(lp.join(', ')));\nif(Array.isArray(input.keywords)&&input.keywords.length>0)p.push('q_keywords='+encodeURIComponent(input.keywords.join(' ')));\n\nreturn [{json:{apolloUrl:'https://api.apollo.io/api/v1/mixed_people/api_search?'+p.join('&'),maxResults:mr,solicitudId,organizacionId,solucion:input.solucion||'',problema_resuelve:input.problema_resuelve||'',casos_exito:input.casos_exito||'',diferenciador:input.diferenciador||'',organizacion:input.organizacion||'',nombre_solicitante:input.nombre_completo||'',email_solicitante:input.email_corporativo||''}}];"
+      },
+      "name": "Preparar1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        1488
+      ],
+      "id": "9d4c0400-df37-40ec-bb8c-886ca3f90caf"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.apolloUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "APOLLO_KEY_PLACEHOLDER"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -448,
+        1488
+      ],
+      "id": "7d218c0f-425a-4eb2-bbc8-af7b5a947091",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "people",
+        "options": {}
+      },
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        1488
+      ],
+      "id": "8953289b-c4dd-4515-bbc9-ff56cfd7ba98",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apollo.io/api/v1/people/match",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "APOLLO_KEY_PLACEHOLDER"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{ $json.id }}\",\n  \"reveal_personal_emails\": false,\n  \"reveal_phone_number\": false\n}",
+        "options": {}
+      },
+      "name": "Apollo Match1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        64,
+        1488
+      ],
+      "id": "54a6e3b6-ee75-4452-8ace-15f1f02ac193"
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "options": {}
+      },
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        400,
+        1488
+      ],
+      "id": "4999d392-0936-498e-9781-d2c85374df1b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================\n// PROCESAR APOLLO → INSERT leads en Supabase\n// Extrae TODOS los campos incluyendo org data\n// =============================================\nconst items = $input.all();\nconst solicitudId = $node['Preparar1'].json.solicitudId;\nconst SB = 'https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\nconst h = {'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=representation'};\n\nconst results = [];\nfor (const item of items) {\n  const p = item.json.person || item.json;\n  const org = p.organization || {};\n  \n  // Fix LinkedIn URLs\n  let liUrl = p.linkedin_url || '';\n  if(liUrl.startsWith('http://')) liUrl = liUrl.replace('http://','https://');\n  if(liUrl && !liUrl.includes('www.linkedin.com')) liUrl = liUrl.replace('linkedin.com','www.linkedin.com');\n  let orgLi = org.linkedin_url || '';\n  if(orgLi.startsWith('http://')) orgLi = orgLi.replace('http://','https://');\n  \n  // Build address\n  const addr = [p.street_address, p.city, p.state, p.country].filter(Boolean).join(', ');\n  \n  const leadData = {\n    solicitud_id: solicitudId,\n    apollo_id: p.id || null,\n    nombre: p.first_name || '',\n    apellido: p.last_name || '',\n    cargo: p.title || '',\n    headline: p.headline || '',\n    seniority: p.seniority || '',\n    departamentos: (p.departments || []).join(', '),\n    linkedin_url: liUrl,\n    email: p.email || '',\n    email_status: p.email_status || '',\n    telefono: p.phone_numbers?.[0]?.sanitized_number || '',\n    direccion: addr || null,\n    ciudad: p.city || '',\n    estado_region: p.state || '',\n    pais: p.country || 'Chile',\n    foto_url: p.photo_url || '',\n    empresa: org.name || '',\n    industria_empresa: org.industry || '',\n    tamano_empresa: org.estimated_num_employees || null,\n    website_empresa: org.website_url || '',\n    linkedin_empresa: orgLi,\n    org_keywords: org.keywords || null,\n    org_short_description: org.short_description || null,\n    org_technology_names: org.technology_names || null\n  };\n  \n  let leadDbId = '';\n  try {\n    const resp = await $helpers.httpRequest({method:'POST',url:SB+'/rest/v1/leads',headers:h,body:JSON.stringify(leadData)});\n    leadDbId = (Array.isArray(resp)?resp[0]:resp)?.id || '';\n  } catch(e){}\n  \n  results.push({json:{...leadData, lead_db_id: leadDbId, 'Apollo ID': p.id||'', 'LinkedIn URL': liUrl}});\n}\nreturn results;"
+      },
+      "name": "Procesar Datos Apollo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        1488
+      ],
+      "id": "f451f5ac-907e-4e70-9d45-977f16d1b15f"
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "name": "Loop por Lead1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1056,
+        1632
+      ],
+      "id": "f6ac7e5c-0246-4522-8d3e-fb5df712a5b4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// LINKEDIN URL's — Limpia y normaliza URLs\nconst items = $input.all();\nreturn items.map(item => {\n  let url = item.json['LinkedIn URL'] || item.json.linkedin_url || '';\n  url = url.trim();\n  if(url.startsWith('http://')) url = url.replace('http://','https://');\n  if(url && !url.startsWith('http')) url = 'https://'+url;\n  if(url.includes('linkedin.com') && !url.includes('www.linkedin.com')) url = url.replace('linkedin.com','www.linkedin.com');\n  let pubId = '';\n  const match = url.match(/linkedin\\.com\\/in\\/([^/?#]+)/);\n  if(match) pubId = match[1];\n  return {json:{...item.json, linkedinUrl:url, linkedinPublicIdentifier:pubId}};\n});"
+      },
+      "name": "LinkedIn url's1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        1632
+      ],
+      "id": "9caa7c9b-9fa5-4f48-8eb7-a35996cde94d"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/harvestapi~linkedin-profile-scraper/run-sync-get-dataset-items?token=APIFY_TOKEN_PLACEHOLDER",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"publicIdentifiers\": [\"{{ $json.linkedinPublicIdentifier }}\"]\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "name": "Run HarvestAPI1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1536,
+        1632
+      ],
+      "id": "1a71e2a6-a97f-4543-bd8d-a2a74b910585",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================\n// PARSEAR LINKEDIN → INSERT leads_linkedin en Supabase\n// Extrae TODOS los campos nuevos\n// =============================================\nconst items = $input.all();\nconst apolloItems = $('LinkedIn url\\'s1').all();\nconst SB = 'https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\nconst h = {'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=minimal'};\n\nconst results = [];\nfor(let i=0;i<items.length;i++){\n  const liRaw = Array.isArray(items[i].json) ? items[i].json[0] : items[i].json;\n  const li = liRaw || {};\n  const apollo = apolloItems[i]?.json || {};\n  const leadDbId = apollo.lead_db_id || '';\n  \n  // Experience (top 5)\n  const exp = Array.isArray(li.experience)\n    ? li.experience.slice(0,5).map(e=>`${e.title||''} en ${e.companyName||''} (${e.duration||''})`).join(' | ')\n    : '';\n  // Education (top 3)\n  const edu = Array.isArray(li.education)\n    ? li.education.slice(0,3).map(e=>`${e.degreeName||''} ${e.fieldOfStudy||''} - ${e.schoolName||''}`).join(' | ')\n    : '';\n  // Skills\n  const skills = Array.isArray(li.skills)\n    ? li.skills.map(s=>typeof s==='string'?s:s.name||'').join(', ')\n    : '';\n  // Courses\n  const courses = Array.isArray(li.courses)\n    ? li.courses.map(c=>typeof c==='string'?c:c.name||'').join(', ')\n    : '';\n  // Projects\n  const projects = Array.isArray(li.projects)\n    ? li.projects.map(p=>`${p.title||''}: ${p.description||''}`).join(' | ')\n    : '';\n  // Publications\n  const pubs = Array.isArray(li.publications)\n    ? li.publications.map(p=>`${p.name||p.title||''}`).join(', ')\n    : '';\n  // Current position\n  const curPos = Array.isArray(li.experience) && li.experience.length>0\n    ? `${li.experience[0].title||''} en ${li.experience[0].companyName||''}`\n    : '';\n  \n  const liData = {\n    lead_id: leadDbId || null,\n    linkedin_public_id: apollo.linkedinPublicIdentifier || '',\n    linkedin_location: li.locationName || li.geoLocationName || li.location || '',\n    headline: li.headline || '',\n    summary: li.about || li.summary || '',\n    experiencia: exp,\n    educacion: edu,\n    skills: skills,\n    ubicacion: li.location || li.geoLocationName || '',\n    conexiones: parseInt(li.connectionsCount) || null,\n    seguidores: parseInt(li.followerCount || li.followersCount) || null,\n    open_to_work: li.isOpenToWork || li.openToWork || false,\n    courses: courses || null,\n    hiring: li.isHiring || false,\n    current_position: curPos || null,\n    projects: projects || null,\n    publications: pubs || null,\n    recent_news: li.recentNews || null\n  };\n  \n  if(leadDbId){\n    try{await $helpers.httpRequest({method:'POST',url:SB+'/rest/v1/leads_linkedin',headers:h,body:JSON.stringify(liData)});}catch(e){}\n  }\n  \n  results.push({json:{\n    'Apollo ID': apollo['Apollo ID']||'',\n    lead_db_id: leadDbId,\n    'LI Headline': liData.headline,\n    'LI Summary': liData.summary,\n    'LI Experiencia': exp,\n    'LI Educación': edu,\n    'LI Skills': skills,\n    'LI Ubicación': liData.ubicacion,\n    'LI Conexiones': String(liData.conexiones||''),\n    'LI Seguidores': String(liData.seguidores||''),\n    'LI Open to Work': liData.open_to_work,\n    'LI Courses': courses,\n    'LI Current Position': curPos,\n    'LI Projects': projects,\n    'LI Publications': pubs,\n    'LI Hiring': liData.hiring,\n    'LI Recent News': liData.recent_news\n  }});\n}\nreturn results;"
+      },
+      "name": "Code in JavaScript",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1728,
+        1632
+      ],
+      "id": "d1335fde-307a-4171-8e3c-454bb37e47ff"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "Apollo ID",
+              "field2": "Apollo ID"
+            }
+          ]
+        },
+        "joinMode": "keepMatches",
+        "options": {}
+      },
+      "name": "Combinar Apollo + LinkedIn1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        2128,
+        1440
+      ],
+      "id": "69caa0b3-1231-4954-874e-e54b3911618f"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================\n// PREPARAR PARA AGENTES → INSERT leads_agentes\n// + UPDATE solicitud status → completed\n// =============================================\nconst items = $input.all();\nconst sol = $node['Preparar1'].json;\nconst SB = 'https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\nconst h = {'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=minimal'};\n\nconst results = [];\nfor(const item of items){\n  const d = item.json;\n  const perfil = `=== DATOS DEL PROSPECTO ===\\nNombre: ${d.nombre||d.Nombre||''} ${d.apellido||d.Apellido||''}\\nCargo: ${d.cargo||d.Cargo||''}\\nHeadline: ${d.headline||d.Headline||''}\\nSeniority: ${d.seniority||d.Seniority||''}\\n\\nEmpresa: ${d.empresa||d.Empresa||''}\\nIndustria: ${d.industria_empresa||''}\\nTamaño: ${d.tamano_empresa||''} empleados\\nWebsite: ${d.website_empresa||''}\\nKeywords web: ${(d.org_keywords||[]).join(', ')}\\nDescripción: ${d.org_short_description||''}\\nTecnologías: ${(d.org_technology_names||[]).join(', ')}\\n\\nDirección: ${d.direccion||''}\\nCiudad: ${d.ciudad||d.Ciudad||''}\\nPaís: ${d.pais||d.País||'Chile'}\\nLinkedIn: ${d.linkedin_url||d['LinkedIn URL']||''}\\nEmail: ${d.email||d.Email||''}\\nTeléfono: ${d.telefono||''}\\n\\n=== PERFIL LINKEDIN ===\\nHeadline LI: ${d['LI Headline']||'N/A'}\\nSummary: ${d['LI Summary']||'N/A'}\\nExperiencia: ${d['LI Experiencia']||'N/A'}\\nEducación: ${d['LI Educación']||'N/A'}\\nSkills: ${d['LI Skills']||'N/A'}\\nCursos: ${d['LI Courses']||'N/A'}\\nProyectos: ${d['LI Projects']||'N/A'}\\nPublicaciones: ${d['LI Publications']||'N/A'}\\nConexiones: ${d['LI Conexiones']||'N/A'}\\nSeguidores: ${d['LI Seguidores']||'N/A'}\\nOpen to Work: ${d['LI Open to Work']||false}\\nHiring: ${d['LI Hiring']||false}\\nRecent News: ${d['LI Recent News']||'N/A'}\\n\\n=== CONTEXTO SOLICITANTE ===\\nOrganización: ${sol.organizacion||''}\\nSolución: ${sol.solucion||''}\\nProblema: ${sol.problema_resuelve||''}\\nCasos éxito: ${sol.casos_exito||''}\\nDiferenciador: ${sol.diferenciador||''}`;\n  \n  if(d.lead_db_id){\n    try{await $helpers.httpRequest({method:'POST',url:SB+'/rest/v1/leads_agentes',headers:h,body:JSON.stringify({lead_id:d.lead_db_id,perfil_para_agente:perfil,status:'pending'})});}catch(e){}\n  }\n  results.push({json:{...d,perfilParaAgente:perfil}});\n}\n\n// Update solicitud → completed\ntry{await $helpers.httpRequest({method:'PATCH',url:SB+'/rest/v1/solicitudes_leads?id=eq.'+sol.solicitudId,headers:h,body:JSON.stringify({status:'completed',leads_found:results.length,processed_at:new Date().toISOString()})});}catch(e){}\n\nreturn results;"
+      },
+      "name": "Preparar Data para Agentes1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2416,
+        1360
+      ],
+      "id": "cd22063a-3d6a-4765-bf68-e61061f6370f"
+    },
+    {
+      "parameters": {
+        "workflowId": "XhmcWgNU92N5tYsX",
+        "options": {}
+      },
+      "name": "Enriquecer Lead (Paralelo)1",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        2656,
+        1360
+      ],
+      "id": "6e70cecc-8d6a-4a2d-8cfb-050e6aee5e1d"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.total_entries }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -248,
+        1488
+      ],
+      "id": "if-resultados-1",
+      "name": "IF Resultados"
+    },
+    {
+      "parameters": {
+        "jsCode": "const SB='https://azqtuvgtmmswvqgyrvct.supabase.co';\nconst SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';\nconst sid=$('Preparar1').first().json.solicitudId;\nif(sid){\n  await fetch(SB+'/rest/v1/solicitudes_leads?id=eq.'+sid,{method:'PATCH',headers:{apikey:SK,Authorization:'Bearer '+SK,'Content-Type':'application/json'},body:JSON.stringify({status:'error',error_message:'Apollo devolvio 0 resultados. Ajusta filtros (title, seniority, departments, company_city).',processed_at:new Date().toISOString()})});\n}\nreturn [{json:{error:'no_results',solicitudId:sid}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        1688
+      ],
+      "id": "error-no-results-1",
+      "name": "Error Sin Resultados"
+    }
+  ],
+  "connections": {
+    "Formulario GHL1": {
+      "main": [
+        [
+          {
+            "node": "Preparar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "IF Resultados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Apollo Match1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apollo Match1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Procesar Datos Apollo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procesar Datos Apollo": {
+      "main": [
+        [
+          {
+            "node": "Loop por Lead1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combinar Apollo + LinkedIn1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop por Lead1": {
+      "main": [
+        [
+          {
+            "node": "Combinar Apollo + LinkedIn1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LinkedIn url's1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn url's1": {
+      "main": [
+        [
+          {
+            "node": "Run HarvestAPI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run HarvestAPI1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop por Lead1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combinar Apollo + LinkedIn1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combinar Apollo + LinkedIn1": {
+      "main": [
+        [
+          {
+            "node": "Preparar Data para Agentes1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Data para Agentes1": {
+      "main": [
+        [
+          {
+            "node": "Enriquecer Lead (Paralelo)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Resultados": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Sin Resultados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0526c7756ee3c413d7fc0de14a30dc34d80884501dac863b3fb034c086a5f09e"
+  }
+}

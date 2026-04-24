@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const fs=require\\('fs'\\);const j=JSON.parse\\(fs.readFileSync\\('c:/Users/Salvo/Desktop/vectork-ia/maquina-de-prospeccion/workflow-agentes-ia-v2.json'\\)\\);console.log\\('nodes:',j.nodes.length\\);console.log\\('connections:',Object.keys\\(j.connections\\).length\\);const disabled=j.nodes.filter\\(n=>n.disabled\\).map\\(n=>n.name\\);console.log\\('disabled:',disabled\\);const empty=j.nodes.filter\\(n=>n.type==='@n8n/n8n-nodes-langchain.chainLlm' && Object.keys\\(n.parameters\\).length===0\\).map\\(n=>n.name\\);console.log\\('chainLlm vacios:',empty\\);\")",
+      "Bash(node -e \"const j=JSON.parse\\(require\\('fs'\\).readFileSync\\('c:/Users/Salvo/Desktop/vectork-ia/maquina-de-prospeccion/workflow-v3-supabase-final.json'\\)\\);console.log\\('W1 OK — nodes:',j.nodes.length\\);\")",
+      "mcp__claude_ai_Supabase__list_extensions",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "Bash(node -e \"const w=require\\('c:/Users/Salvo/Desktop/vectork-ia/maquina-de-prospeccion/workflow-v3-supabase-final.json'\\); const p=w.nodes.find\\(n=>n.name==='Preparar1'\\); console.log\\(p.parameters.jsCode\\);\")"
+    ]
+  }
+}

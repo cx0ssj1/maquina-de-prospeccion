@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leads Dashboard — Máquina de Prospección</title>
+<style>
+  :root {
+    --bg: #0a0b0f;
+    --panel: #12141a;
+    --panel-2: #1a1d25;
+    --border: #24262e;
+    --text: #e8eaed;
+    --muted: #8b8e97;
+    --accent: #4f8bff;
+    --accent-2: #7c3aed;
+    --ok: #10b981;
+    --warn: #f59e0b;
+    --err: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  h1 { font-size: 20px; font-weight: 600; }
+  .stats { display: flex; gap: 16px; flex-wrap: wrap; }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat-value { font-size: 18px; font-weight: 600; color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .filters { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .filters input, .filters select {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .filters input { flex: 1; min-width: 240px; }
+  .filters input:focus, .filters select:focus { outline: none; border-color: var(--accent); }
+  .btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+  }
+  .btn:hover { background: #3b74e8; }
+  .btn-secondary { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--border); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.15s;
+    cursor: pointer;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600; font-size: 18px; flex-shrink: 0;
+    background-size: cover; background-position: center;
+  }
+  .card-info { flex: 1; min-width: 0; }
+  .card-name { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+  .card-role { color: var(--muted); font-size: 13px; }
+  .card-company { color: var(--accent); font-size: 13px; margin-top: 2px; }
+  .card-score {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--panel-2);
+  }
+  .score-high { background: rgba(16, 185, 129, 0.15); color: var(--ok); }
+  .score-mid { background: rgba(245, 158, 11, 0.15); color: var(--warn); }
+  .score-low { background: rgba(239, 68, 68, 0.15); color: var(--err); }
+  .score-none { color: var(--muted); }
+  .card-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .card-meta > span { display: flex; align-items: center; gap: 4px; }
+  .status-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .status-completed { background: rgba(16,185,129,0.15); color: var(--ok); }
+  .status-processing { background: rgba(79,139,255,0.15); color: var(--accent); }
+  .status-pending { background: rgba(139,142,151,0.15); color: var(--muted); }
+  .status-error { background: rgba(239,68,68,0.15); color: var(--err); }
+  .modal-bg {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 900px; width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-head {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; background: var(--panel); z-index: 1;
+  }
+  .modal-body { padding: 24px; }
+  .close-btn {
+    background: none; border: none; color: var(--muted);
+    font-size: 24px; cursor: pointer; padding: 0; line-height: 1;
+  }
+  .close-btn:hover { color: var(--text); }
+  .section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--panel-2);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+  }
+  .section h3 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--accent); margin-bottom: 10px; font-weight: 600;
+  }
+  .field { margin-bottom: 8px; }
+  .field-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; }
+  .field-value { font-size: 13px; margin-top: 2px; white-space: pre-wrap; word-break: break-word; }
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 16px; overflow-x: auto; }
+  .tab {
+    padding: 10px 16px;
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 13px; font-family: inherit; font-weight: 500;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+  .copy-btn {
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--muted); padding: 4px 8px; border-radius: 4px;
+    cursor: pointer; font-size: 11px; font-family: inherit;
+    margin-left: 8px;
+  }
+  .copy-btn:hover { color: var(--text); border-color: var(--accent); }
+  .btn-danger {
+    background: var(--err); color: white; border: none;
+    padding: 10px 16px; border-radius: 8px; cursor: pointer;
+    font-size: 14px; font-weight: 500; font-family: inherit;
+  }
+  .btn-danger:hover { background: #dc2626; }
+  .card-delete {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); width: 28px; height: 28px; border-radius: 6px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; padding: 0; flex-shrink: 0;
+  }
+  .card-delete:hover { color: var(--err); border-color: var(--err); background: rgba(239,68,68,0.08); }
+  .confirm-modal {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; max-width: 440px; width: 100%;
+    padding: 24px;
+  }
+  .confirm-modal h2 { font-size: 18px; margin-bottom: 8px; }
+  .confirm-modal p { color: var(--muted); margin-bottom: 20px; font-size: 14px; }
+  .confirm-modal .lead-ref {
+    background: var(--panel-2); border-radius: 6px; padding: 12px;
+    margin-bottom: 20px; font-size: 13px;
+  }
+  .confirm-modal .lead-ref strong { color: var(--text); }
+  .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .empty.error { color: var(--err); }
+  .empty pre { background: var(--panel-2); padding: 12px; border-radius: 8px; margin-top: 12px; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto; font-size: 12px; }
+  .retry-btn { margin-top: 16px; }
+  .toast {
+    position: fixed; top: 20px; right: 20px; z-index: 200;
+    background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    color: var(--text); padding: 12px 16px; border-radius: 8px;
+    font-size: 13px; max-width: 360px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    opacity: 0; transform: translateX(20px); transition: all .2s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(0); pointer-events: auto; }
+  .toast.ok { border-left-color: var(--ok); }
+  .toast.err { border-left-color: var(--err); }
+  .toast.warn { border-left-color: var(--warn); }
+  .loading { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .spinner {
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    width: 32px; height: 32px;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  pre { white-space: pre-wrap; word-break: break-word; font-family: inherit; font-size: 13px; }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    .stats { gap: 12px; }
+    main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-row">
+    <h1>Leads Dashboard</h1>
+    <div class="stats" id="stats">
+      <div class="stat"><div class="stat-value" id="statLeads">—</div><div class="stat-label">Leads</div></div>
+      <div class="stat"><div class="stat-value" id="statSolicitudes">—</div><div class="stat-label">Solicitudes</div></div>
+      <div class="stat"><div class="stat-value" id="statOrgs">—</div><div class="stat-label">Organizaciones</div></div>
+      <div class="stat"><div class="stat-value" id="statCompleted">—</div><div class="stat-label">Completados</div></div>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="filters">
+    <input type="text" id="search" placeholder="Buscar por nombre, empresa, cargo, email...">
+    <select id="filterSolicitud"><option value="">Todas las solicitudes</option></select>
+    <select id="filterStatus">
+      <option value="">Todos los estados</option>
+      <option value="completed">Completados</option>
+      <option value="processing">Procesando</option>
+      <option value="pending">Pendientes</option>
+      <option value="error">Error</option>
+    </select>
+    <button class="btn" onclick="loadData()">Recargar</button>
+  </div>
+  <div id="content">
+    <div class="loading"><div class="spinner"></div>Cargando leads...</div>
+  </div>
+</main>
+
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <div id="modalTitle"></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn-danger" style="padding:6px 12px;font-size:13px" id="modalDeleteBtn">Eliminar</button>
+        <button class="close-btn" onclick="closeModal()">×</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="confirmModal" onclick="if(event.target===this)closeConfirm()">
+  <div class="confirm-modal">
+    <h2>¿Eliminar prospecto?</h2>
+    <p>Esta acción no se puede deshacer. Se borrarán también los datos de LinkedIn y análisis IA relacionados.</p>
+    <div class="lead-ref" id="confirmLeadRef"></div>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-danger" id="confirmDeleteBtn">Eliminar definitivamente</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://azqtuvgtmmswvqgyrvct.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ';
+const H = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY };
+
+let allLeads = [];
+let allSolicitudes = [];
+
+function toast(msg, type='ok', ms=4000) {
+  const el = document.getElementById('toast');
+  el.className = 'toast ' + type + ' show';
+  el.textContent = msg;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('show'), ms);
+}
+
+async function sb(path, opts={}) {
+  const { method='GET', body=null, timeoutMs=20000, retries=2 } = opts;
+  let lastErr;
+  for (let attempt=0; attempt<=retries; attempt++) {
+    const ac = new AbortController();
+    const t = setTimeout(() => ac.abort(), timeoutMs);
+    try {
+      const r = await fetch(SB_URL + '/rest/v1/' + path, {
+        method,
+        headers: { ...H, 'Content-Type': 'application/json', ...(method==='DELETE' ? { 'Prefer': 'return=minimal' } : {}) },
+        body: body ? JSON.stringify(body) : null,
+        signal: ac.signal
+      });
+      clearTimeout(t);
+      if (!r.ok) {
+        const txt = await r.text().catch(() => '');
+        const err = new Error(`HTTP ${r.status} — ${txt || r.statusText}`);
+        err.status = r.status;
+        err.body = txt;
+        if (r.status === 401 || r.status === 403) throw err;
+        if (r.status >= 500 && attempt < retries) { lastErr = err; await new Promise(res => setTimeout(res, 400 * (attempt+1))); continue; }
+        throw err;
+      }
+      if (method === 'DELETE') return true;
+      const ct = r.headers.get('content-type') || '';
+      return ct.includes('json') ? r.json() : r.text();
+    } catch (e) {
+      clearTimeout(t);
+      lastErr = e;
+      if (e.name === 'AbortError' && attempt < retries) continue;
+      if (e.status === 401 || e.status === 403) throw e;
+      if (attempt < retries && (e.message?.includes('Failed to fetch') || e.name === 'TypeError')) {
+        await new Promise(res => setTimeout(res, 400 * (attempt+1)));
+        continue;
+      }
+      throw e;
+    }
+  }
+  throw lastErr;
+}
+
+function showError(where, err) {
+  const hint = err.status === 401 || err.status === 403
+    ? 'Permiso denegado. Revisa RLS policies en Supabase.'
+    : err.name === 'AbortError' ? 'Timeout. Red lenta o Supabase sin respuesta.'
+    : err.message?.includes('Failed to fetch') ? 'Sin conexión. Revisa tu red o el estado de Supabase.'
+    : '';
+  const msg = escapeHtml(err.message || String(err));
+  document.getElementById(where).innerHTML = `
+    <div class="empty error">
+      <div><strong>Error cargando datos</strong></div>
+      ${hint ? `<div style="margin-top:8px">${escapeHtml(hint)}</div>` : ''}
+      <pre>${msg}</pre>
+      <button class="btn retry-btn" onclick="loadData()">Reintentar</button>
+    </div>`;
+}
+
+async function loadData() {
+  document.getElementById('content').innerHTML = '<div class="loading"><div class="spinner"></div>Cargando leads...</div>';
+  try {
+    const [leads, solicitudes, orgs] = await Promise.all([
+      sb('leads?select=*,leads_linkedin(*),leads_agentes(*),solicitudes_leads(id,organizacion,nombre_completo,created_at,status,solucion,problema_resuelve,diferenciador)&order=created_at.desc'),
+      sb('solicitudes_leads?select=*&order=created_at.desc'),
+      sb('organizaciones?select=count')
+    ]);
+    const pick = (v) => Array.isArray(v) ? v[0] : v;
+    allLeads = leads.map(l => ({
+      ...l,
+      leads_linkedin: pick(l.leads_linkedin),
+      leads_agentes: pick(l.leads_agentes),
+      solicitudes_leads: pick(l.solicitudes_leads)
+    }));
+    allSolicitudes = solicitudes;
+
+    document.getElementById('statLeads').textContent = leads.length;
+    document.getElementById('statSolicitudes').textContent = solicitudes.length;
+    document.getElementById('statOrgs').textContent = orgs[0]?.count || 0;
+    document.getElementById('statCompleted').textContent = allLeads.filter(l => l.leads_agentes?.status === 'completed').length;
+
+    const sel = document.getElementById('filterSolicitud');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">Todas las solicitudes</option>' +
+      solicitudes.map(s => `<option value="${s.id}">${escapeHtml(s.organizacion || '—')} — ${new Date(s.created_at).toLocaleDateString()} [${s.status||'?'}]</option>`).join('');
+    sel.value = prev;
+
+    render();
+  } catch (e) {
+    console.error('loadData error:', e);
+    showError('content', e);
+  }
+}
+
+function normalize(s) {
+  return String(s == null ? '' : s).toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s@._-]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function levenshtein(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  if (Math.abs(a.length - b.length) > 3) return 99;
+  const prev = new Array(b.length + 1);
+  for (let j = 0; j <= b.length; j++) prev[j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    let curr = [i];
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i-1] === b[j-1] ? 0 : 1;
+      curr[j] = Math.min(curr[j-1] + 1, prev[j] + 1, prev[j-1] + cost);
+    }
+    for (let j = 0; j <= b.length; j++) prev[j] = curr[j];
+  }
+  return prev[b.length];
+}
+
+function fuzzyMatch(query, hay) {
+  const q = normalize(query);
+  if (!q) return true;
+  const h = normalize(hay);
+  if (!h) return false;
+  if (h.includes(q)) return true;
+  const qWords = q.split(' ').filter(w => w.length >= 2);
+  const hWords = h.split(' ').filter(w => w.length >= 2);
+  if (!qWords.length) return false;
+  return qWords.every(qw => {
+    if (h.includes(qw)) return true;
+    const tol = qw.length <= 4 ? 1 : qw.length <= 7 ? 2 : 3;
+    return hWords.some(hw => {
+      if (hw.includes(qw) || qw.includes(hw)) return true;
+      return levenshtein(qw, hw) <= tol;
+    });
+  });
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const solId = document.getElementById('filterSolicitud').value;
+  const status = document.getElementById('filterStatus').value;
+
+  const filtered = allLeads.filter(l => {
+    if (solId && l.solicitud_id !== solId) return false;
+    const agStatus = l.leads_agentes?.status || 'pending';
+    if (status && agStatus !== status) return false;
+    if (!q) return true;
+    const li = l.leads_linkedin || {};
+    const hay = [
+      l.nombre, l.apellido, l.nombre_completo, l.cargo, l.empresa, l.email,
+      l.headline, l.ciudad, l.estado_region, l.pais, l.industria_empresa,
+      li.headline, li.current_position, li.ubicacion, li.skills
+    ].filter(Boolean).join(' ');
+    return fuzzyMatch(q, hay);
+  });
+
+  const c = document.getElementById('content');
+  if (filtered.length === 0) {
+    c.innerHTML = '<div class="empty">No hay leads que coincidan con los filtros.</div>';
+    return;
+  }
+
+  c.innerHTML = '<div class="grid">' + filtered.map(leadCard).join('') + '</div>';
+}
+
+function leadCard(l) {
+  const ag = l.leads_agentes || {};
+  const score = ag.score;
+  const scoreClass = score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : score != null ? 'score-low' : 'score-none';
+  const scoreTxt = score != null ? Math.round(score) : '—';
+  const status = ag.status || 'pending';
+  const initials = ((l.nombre||'?')[0] + (l.apellido||'')[0]).toUpperCase();
+  const avatar = l.foto_url
+    ? `<div class="avatar" style="background-image:url('${escapeAttr(l.foto_url)}')"></div>`
+    : `<div class="avatar">${initials}</div>`;
+
+  return `<div class="card" onclick="openLead('${l.id}')">
+    <div class="card-head">
+      ${avatar}
+      <div class="card-info">
+        <div class="card-name">${escapeHtml((l.nombre||'') + ' ' + (l.apellido||''))}</div>
+        <div class="card-role">${escapeHtml(l.cargo||'—')}</div>
+        <div class="card-company">${escapeHtml(l.empresa||'—')}</div>
+      </div>
+      <div class="card-score ${scoreClass}">${scoreTxt}</div>
+      <button class="card-delete" title="Eliminar prospecto" onclick="event.stopPropagation();askDelete('${l.id}')">🗑</button>
+    </div>
+    <div class="card-meta">
+      <span class="status-badge status-${status}">${status}</span>
+      ${l.email ? `<span>📧 ${escapeHtml(l.email)}</span>` : ''}
+      ${l.ciudad ? `<span>📍 ${escapeHtml(l.ciudad)}</span>` : ''}
+      ${l.linkedin_url ? `<span><a href="${escapeAttr(l.linkedin_url)}" target="_blank" onclick="event.stopPropagation()">LinkedIn</a></span>` : ''}
+    </div>
+  </div>`;
+}
+
+function openLead(id) {
+  const l = allLeads.find(x => x.id === id);
+  if (!l) return;
+  const li = l.leads_linkedin || {};
+  const ag = l.leads_agentes || {};
+  const sol = l.solicitudes_leads || {};
+
+  document.getElementById('modalTitle').innerHTML = `<strong>${escapeHtml((l.nombre||'') + ' ' + (l.apellido||''))}</strong> <span style="color:var(--muted);font-size:13px">${escapeHtml(l.cargo||'')} @ ${escapeHtml(l.empresa||'')}</span>`;
+
+  const tabs = [
+    { id: 'overview', label: 'General', render: () => renderOverview(l, sol) },
+    { id: 'linkedin', label: 'LinkedIn', render: () => renderLinkedin(li) },
+    { id: 'analysis', label: 'Análisis IA', render: () => renderAnalysis(ag) },
+    { id: 'outreach', label: 'Outreach', render: () => renderOutreach(ag) },
+    { id: 'perfil', label: 'Perfil Agente', render: () => renderPerfil(ag) }
+  ];
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="tabs">${tabs.map((t,i) => `<button class="tab ${i===0?'active':''}" data-tab="${t.id}">${t.label}</button>`).join('')}</div>
+    ${tabs.map((t,i) => `<div class="tab-pane ${i===0?'active':''}" data-pane="${t.id}">${t.render()}</div>`).join('')}
+  `;
+
+  document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.querySelector(`[data-pane="${t.dataset.tab}"]`).classList.add('active');
+  });
+
+  document.getElementById('modalDeleteBtn').onclick = () => askDelete(l.id);
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function askDelete(id) {
+  const l = allLeads.find(x => x.id === id);
+  if (!l) return;
+  const name = (l.nombre||'') + ' ' + (l.apellido||'');
+  document.getElementById('confirmLeadRef').innerHTML = `
+    <strong>${escapeHtml(name.trim() || 'Prospecto sin nombre')}</strong><br>
+    ${escapeHtml(l.cargo || '')} ${l.empresa ? '@ ' + escapeHtml(l.empresa) : ''}<br>
+    <span style="color:var(--muted);font-size:11px">ID: ${escapeHtml(l.id)}</span>
+  `;
+  const btn = document.getElementById('confirmDeleteBtn');
+  btn.onclick = () => deleteLead(id, btn);
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+function closeConfirm() { document.getElementById('confirmModal').classList.remove('open'); }
+
+async function deleteLead(id, btn) {
+  const orig = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Eliminando...';
+  try {
+    // Verify row exists first so we don't silently succeed on nothing
+    const check = await sb('leads?select=id&id=eq.' + encodeURIComponent(id), { retries: 1 });
+    if (!Array.isArray(check) || !check.length) {
+      throw new Error('Lead no existe (ya fue eliminado)');
+    }
+    await sb('leads?id=eq.' + encodeURIComponent(id), { method: 'DELETE', retries: 1 });
+    // Re-verify it's gone
+    const after = await sb('leads?select=id&id=eq.' + encodeURIComponent(id), { retries: 0 });
+    if (Array.isArray(after) && after.length) {
+      throw new Error('Supabase no devolvió error pero el lead sigue existiendo. Revisa RLS / foreign keys bloqueando la eliminación.');
+    }
+    allLeads = allLeads.filter(x => x.id !== id);
+    document.getElementById('statLeads').textContent = allLeads.length;
+    document.getElementById('statCompleted').textContent = allLeads.filter(l => l.leads_agentes?.status === 'completed').length;
+    render();
+    closeConfirm();
+    closeModal();
+    toast('Prospecto eliminado', 'ok');
+  } catch (e) {
+    console.error('deleteLead error:', e);
+    const hint = e.status === 401 || e.status === 403
+      ? ' (Permiso denegado. Falta policy DELETE en RLS.)'
+      : '';
+    toast('Error al eliminar: ' + (e.message || e) + hint, 'err', 7000);
+    btn.disabled = false;
+    btn.textContent = orig;
+  }
+}
+
+function section(title, fields) {
+  const rows = fields.filter(([,v]) => v != null && v !== '').map(([k,v]) =>
+    `<div class="field"><div class="field-label">${escapeHtml(k)}</div><div class="field-value">${typeof v === 'string' ? escapeHtml(v) : v}</div></div>`
+  ).join('');
+  return rows ? `<div class="section"><h3>${escapeHtml(title)}</h3>${rows}</div>` : '';
+}
+
+function copyable(text) {
+  if (!text) return '—';
+  const id = 'c' + Math.random().toString(36).slice(2,9);
+  return `<div style="position:relative"><pre id="${id}">${escapeHtml(text)}</pre><button class="copy-btn" style="position:absolute;top:0;right:0" onclick="copyText('${id}')">Copiar</button></div>`;
+}
+
+function copyText(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    const btn = event.target;
+    const old = btn.textContent;
+    btn.textContent = '✓';
+    setTimeout(() => btn.textContent = old, 1500);
+  });
+}
+
+function renderOverview(l, sol) {
+  return section('Prospecto', [
+    ['Nombre completo', (l.nombre||'') + ' ' + (l.apellido||'')],
+    ['Cargo', l.cargo],
+    ['Headline', l.headline],
+    ['Seniority', l.seniority],
+    ['Departamentos', l.departamentos],
+    ['Email', l.email],
+    ['Email status', l.email_status],
+    ['Teléfono', l.telefono],
+    ['LinkedIn', l.linkedin_url ? `<a href="${escapeAttr(l.linkedin_url)}" target="_blank">${escapeHtml(l.linkedin_url)}</a>` : null],
+    ['Ubicación', [l.ciudad, l.estado_region, l.pais].filter(Boolean).join(', ')],
+    ['Apollo ID', l.apollo_id]
+  ]) + section('Empresa', [
+    ['Nombre', l.empresa],
+    ['Industria', l.industria_empresa],
+    ['Tamaño', l.tamano_empresa ? l.tamano_empresa + ' empleados' : null],
+    ['Website', l.website_empresa ? `<a href="${escapeAttr(l.website_empresa)}" target="_blank">${escapeHtml(l.website_empresa)}</a>` : null],
+    ['LinkedIn empresa', l.linkedin_empresa ? `<a href="${escapeAttr(l.linkedin_empresa)}" target="_blank">${escapeHtml(l.linkedin_empresa)}</a>` : null],
+    ['Descripción', l.org_short_description],
+    ['Keywords', Array.isArray(l.org_keywords) ? l.org_keywords.join(', ') : null],
+    ['Tecnologías', Array.isArray(l.org_technology_names) ? l.org_technology_names.join(', ') : null]
+  ]) + section('Solicitud origen', [
+    ['Organización solicitante', sol.organizacion],
+    ['Responsable', sol.nombre_completo],
+    ['Fecha solicitud', sol.created_at ? new Date(sol.created_at).toLocaleString() : null],
+    ['Status solicitud', sol.status],
+    ['Solución ofrecida', sol.solucion],
+    ['Problema que resuelve', sol.problema_resuelve],
+    ['Diferenciador', sol.diferenciador]
+  ]);
+}
+
+function renderLinkedin(li) {
+  if (!li.id) return '<div class="empty">No hay datos de LinkedIn para este lead.</div>';
+  return section('Perfil LinkedIn', [
+    ['Headline', li.headline],
+    ['Summary', li.summary],
+    ['Ubicación', li.ubicacion || li.linkedin_location],
+    ['Conexiones', li.conexiones],
+    ['Seguidores', li.seguidores],
+    ['Posición actual', li.current_position],
+    ['Open to Work', li.open_to_work ? 'Sí' : 'No'],
+    ['Hiring', li.hiring ? 'Sí' : 'No']
+  ]) + section('Experiencia', [['Experiencia', li.experiencia]])
+    + section('Educación', [['Educación', li.educacion]])
+    + section('Skills', [['Skills', li.skills]])
+    + section('Cursos', [['Cursos', li.courses]])
+    + section('Proyectos', [['Proyectos', li.projects]])
+    + section('Publicaciones', [['Publicaciones', li.publications]])
+    + section('Recent news', [['Recent news', li.recent_news]]);
+}
+
+function renderAnalysis(ag) {
+  if (!ag.id) return '<div class="empty">Sin análisis todavía. Status: pendiente.</div>';
+  return section('Score & Research', [
+    ['Score', ag.score != null ? ag.score + ' / 100' : null],
+    ['Justificación', ag.score_justificacion],
+    ['Research output', ag.research_output],
+    ['Extracción ejecutiva', ag.extraccion]
+  ]) + section('Personalidad', [
+    ['DISC', ag.disc_type],
+    ['Rasgos', ag.personality_traits],
+    ['Comportamiento', ag.behavior_summary],
+    ['Guía comunicación', ag.communication_guide],
+    ['Drivers energía', ag.energy_drivers]
+  ]) + section('Dolor & Match', [
+    ['Declaraciones problemas', ag.declaraciones_problemas],
+    ['Match reason', ag.match_reason],
+    ['Variables dolor', ag.variables_dolor],
+    ['Problema/causa', ag.problema_causa],
+    ['Consecuencia', ag.consecuencia],
+    ['Solución posicionada', ag.solucion],
+    ['Prueba social ideal', ag.prueba_social],
+    ['Selected pain ID', ag.selected_pain_id],
+    ['Motor de compra', ag.motor_hipotesis]
+  ]) + section('Talking points', [['Talking points', ag.talking_points]]);
+}
+
+function renderOutreach(ag) {
+  if (!ag.id) return '<div class="empty">Sin outreach generado.</div>';
+  const blocks = [
+    ['LinkedIn mensaje', ag.linkedin_mensaje],
+    ['Email subject', ag.email_subject],
+    ['Email generado (final)', ag.email_generado],
+    ['Cold email 1', ag.cold_email_1],
+    ['Cold email 2', ag.cold_email_2],
+    ['Secuencia email 2', ag.secuencia_email_2],
+    ['Secuencia email 3', ag.secuencia_email_3],
+    ['Secuencia email 4', ag.secuencia_email_4],
+    ['Cold call 1', ag.cold_call_1],
+    ['Cold call 2', ag.cold_call_2],
+    ['Pitch comercial 1', ag.pitch_comercial_1],
+    ['Pitch comercial 2', ag.pitch_comercial_2]
+  ].filter(([,v]) => v);
+  if (blocks.length === 0) return '<div class="empty">Sin copy generado aún.</div>';
+  return blocks.map(([title, content]) =>
+    `<div class="section"><h3>${escapeHtml(title)}</h3>${copyable(content)}</div>`
+  ).join('');
+}
+
+function renderPerfil(ag) {
+  if (!ag.perfil_para_agente) return '<div class="empty">Sin perfil generado.</div>';
+  return `<div class="section"><h3>Perfil enviado a los agentes IA</h3>${copyable(ag.perfil_para_agente)}</div>`;
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('filterSolicitud').addEventListener('change', render);
+document.getElementById('filterStatus').addEventListener('change', render);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('confirmModal').classList.contains('open')) closeConfirm();
+    else closeModal();
+  }
+});
+
+loadData();
+</script>
+</body>
+</html>
