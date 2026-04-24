@@ -29,6 +29,7 @@ Formulario HTML → Supabase (solicitudes_leads) → n8n Webhook → Apollo Sear
 - **Anon Key**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6cXR1dmd0bW1zd3ZxZ3lydmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTQ4NjEsImV4cCI6MjA5MTUzMDg2MX0.YRPD8A5SUcJt0EG7tZU-Q9EUzx8RT5RwbRe_jCVO-OQ`
 - **RLS**: insert anónimo permitido, service role full access, public read
 
+
 ### APIs Externas
 - **Apollo API Key**: `APOLLO_KEY_PLACEHOLDER` (Basic plan, Master Key)
 - **Apify (HarvestAPI) Token**: `APIFY_TOKEN_PLACEHOLDER`
