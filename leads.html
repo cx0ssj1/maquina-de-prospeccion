@@ -695,7 +695,8 @@ function renderAnalysis(ag) {
 function renderOutreach(ag) {
   if (!ag.id) return '<div class="empty">Sin outreach generado.</div>';
   const blocks = [
-    ['LinkedIn mensaje', ag.linkedin_mensaje],
+    ['LinkedIn mensaje 1 (primer contacto)', ag.linkedin_mensaje],
+    ['LinkedIn mensaje 2 (seguimiento / insistencia)', ag.linkedin_mensaje_2],
     ['Email subject', ag.email_subject],
     ['Email generado (final)', ag.email_generado],
     ['Cold email 1', ag.cold_email_1],

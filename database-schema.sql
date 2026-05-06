@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS public.leads_agentes (
   motor_hipotesis text,
   -- Outreach
   linkedin_mensaje text,
+  linkedin_mensaje_2 text,
   linkedin_msg text,
   pitch_comercial_1 text,
   pitch_comercial_2 text,
@@ -187,3 +188,14 @@ ALTER TABLE public.leads_agentes ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "ag_read" ON public.leads_agentes FOR SELECT USING (true);
 CREATE POLICY "ag_insert" ON public.leads_agentes FOR INSERT WITH CHECK (true);
 CREATE POLICY "ag_update" ON public.leads_agentes FOR UPDATE USING (true);
+
+-- =============================================
+-- DELETE policies (anon + authenticated)
+-- Permite borrar desde leads.html con anon key.
+-- Cascade FK encadena leads → leads_linkedin + leads_agentes.
+-- =============================================
+CREATE POLICY "leads_delete_anon" ON public.leads FOR DELETE TO anon, authenticated USING (true);
+CREATE POLICY "leads_agentes_delete_anon" ON public.leads_agentes FOR DELETE TO anon, authenticated USING (true);
+CREATE POLICY "leads_linkedin_delete_anon" ON public.leads_linkedin FOR DELETE TO anon, authenticated USING (true);
+CREATE POLICY "solicitudes_delete_anon" ON public.solicitudes_leads FOR DELETE TO anon, authenticated USING (true);
+CREATE POLICY "organizaciones_delete_anon" ON public.organizaciones FOR DELETE TO anon, authenticated USING (true);
